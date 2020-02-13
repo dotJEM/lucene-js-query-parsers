@@ -1,0 +1,1 @@
+java -jar %~dp0\antlr-4.8-complete.jar %*
