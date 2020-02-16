@@ -115,7 +115,7 @@ export class LuceneStandardQueryVisitor {
         if(children.length < 2)
             return children[0];
 
-        return new OrQuery(ctx.getText(), children);
+        return new OrQuery(children);
     }
 
     clauseAnd(ctx: any):Query {
@@ -123,7 +123,7 @@ export class LuceneStandardQueryVisitor {
         if(children.length < 2)
             return children[0];
 
-        return new AndQuery(ctx.getText(), children);
+        return new AndQuery(children);
     }
 
     clauseDefault(ctx: any):Query {
@@ -131,7 +131,7 @@ export class LuceneStandardQueryVisitor {
         if(children.length < 2)
             return children[0];
 
-        return new AndQuery(ctx.getText(), children);
+        return new AndQuery(children);
     }
 
     clauseNot(ctx: any):Query {
@@ -140,93 +140,102 @@ export class LuceneStandardQueryVisitor {
             return children[0];
 
         for (let i = 1; i < children.length; i++)
-            children[i] = new NotQuery(children[i].value, children[i]);
+            children[i] = new NotQuery(children[i]);
 
-        return new AndQuery(ctx.getText(), children);
+        return new AndQuery(children);
     }
 
     atom(ctx: any):Query {
-        // atom
-        //   : modifier? field multi_value term_modifier?
-        //   | modifier? field? value term_modifier?
-        //   ;
-        const children = this.mapChildren(ctx);
+        if(ctx.children) {
+            let modifier = null;
+            let field = null;
+            let value = null;
+            let termModifier = null;
 
-
-        return new FieldQuery(ctx.getText(),
-            children,
-            null,
-
-        );
-    }
-
-    field(ctx): Query {
-        return this.mapChildren(ctx).filter(q => (q as any).type === 'field_name')[0];
-    }
-
-    value(ctx):Query {
-        return new UnknownQuery(
-            ctx,
-            ctx.parser.ruleNames[ctx.ruleIndex],
-            ctx.getText());
+            for(let i = 0; i<ctx.children.length; i++){
+                const child = ctx.children[i];
+                switch (this.rule(child)) {
+                    case 'modifier':
+                        modifier = child.getText();
+                        break;
+                    case 'field':
+                        field = child.children.filter(c => this.rule(c) === 'field_name')[0].getText();
+                        break;
+                    case 'value':
+                        value = child.getText();
+                        break;
+                    case 'multi_value':
+                        throw new Error('Not implemented');
+                    case 'term_modifler':
+                        termModifier = child.getText();
+                        break;
+                }
+            }
+            return new FieldQuery(field, value, modifier, termModifier)
+        }
+        return null;
     }
 
     or_() {}
     and_() {}
     not_() {}
     sep() {}
+
+    private rule(ctx){
+        return this.parser.ruleNames[ctx.ruleIndex];
+    }
 }
 
 class Query {
-    constructor(public value) {
+    constructor() {
     }
 }
 
 class UnknownQuery extends Query {
     public $type = 'UnknownQuery';
 
-    constructor(context, public type, value, public children?) {
-        super(value)
+    constructor(context, public type, public value, public children?) {
+        super()
     }
 }
 
 class Terminal extends Query {
     public $type = 'Terminal';
 
-    constructor(context, value, public symbol) {
-        super(value);
+    constructor(context, public value, public symbol) {
+        super();
     }
 }
 
 class AndQuery extends Query {
     public $type = 'AndQuery';
 
-    constructor(value, public children) {
-        super(value)
+    constructor(public children) {
+        super();
     }
 }
 
 class OrQuery extends Query {
     public $type = 'OrQuery';
 
-    constructor(value, public children) {
-        super(value)
+    constructor(public children) {
+        super();
     }
 }
 
 class NotQuery extends Query {
     public $type = 'NotQuery';
 
-    constructor(value, public child) {
-        super(value)
+    constructor(public child) {
+        super();
     }
 }
 
 class FieldQuery extends Query {
     public $type = 'FieldQuery';
 
-    constructor(value, public fieldName, public fieldValue) {
-        super(value)
+    constructor(public fieldName, public fieldValue, public modifier, public termModifier) {
+        super()
     }
 }
 

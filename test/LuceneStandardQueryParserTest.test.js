@@ -18,8 +18,8 @@ function track() {
 function dump(value, path) {
     fs_1.writeFileSync(path || 'dump.json', JSON.stringify(value, track(), 4), 'utf-8');
 }
-test('two plus two is four', function () {
-    var _a = parser.parse("name: Peter OR name: Anna NOT name: Claus OR name: Peter"), tree = _a[0], ast = _a[1];
+test('name: Peter OR name: Anna NOT name: Claus OR name: Hans', function () {
+    var _a = parser.parse("name: Peter OR name: Anna NOT name: Claus OR name: Hans"), tree = _a[0], ast = _a[1];
     dump(tree, 'tree.json');
     /*
     * OR (

@@ -1,99 +1,45 @@
 {
-    "value": "name: Peter OR name: Anna NOT name: Claus OR name: Peter",
     "children": [
         {
-            "value": "name: Peter",
             "type": "clauseBasic",
+            "value": "name: Peter",
             "children": [
                 {
-                    "value": "name: Peter",
-                    "fieldName": [
-                        {
-                            "value": "name",
-                            "type": "field_name",
-                            "children": [
-                                {
-                                    "value": "name",
-                                    "symbol": "TERM_NORMAL",
-                                    "$type": "Terminal"
-                                }
-                            ],
-                            "$type": "UnknownQuery"
-                        },
-                        {
-                            "value": "Peter",
-                            "type": "value",
-                            "$type": "UnknownQuery"
-                        }
-                    ],
-                    "fieldValue": null,
+                    "fieldName": "name",
+                    "fieldValue": "Peter",
+                    "modifier": null,
+                    "termModifier": null,
                     "$type": "FieldQuery"
                 }
             ],
             "$type": "UnknownQuery"
         },
         {
-            "value": " name: Anna NOT name: Claus",
             "children": [
                 {
-                    "value": " name: Anna",
                     "type": "clauseBasic",
+                    "value": " name: Anna",
                     "children": [
                         {
-                            "value": "name: Anna",
-                            "fieldName": [
-                                {
-                                    "value": "name",
-                                    "type": "field_name",
-                                    "children": [
-                                        {
-                                            "value": "name",
-                                            "symbol": "TERM_NORMAL",
-                                            "$type": "Terminal"
-                                        }
-                                    ],
-                                    "$type": "UnknownQuery"
-                                },
-                                {
-                                    "value": "Anna",
-                                    "type": "value",
-                                    "$type": "UnknownQuery"
-                                }
-                            ],
-                            "fieldValue": null,
+                            "fieldName": "name",
+                            "fieldValue": "Anna",
+                            "modifier": null,
+                            "termModifier": null,
                             "$type": "FieldQuery"
                         }
                     ],
                     "$type": "UnknownQuery"
                 },
                 {
-                    "value": " name: Claus",
                     "child": {
-                        "value": " name: Claus",
                         "type": "clauseBasic",
+                        "value": " name: Claus",
                         "children": [
                             {
-                                "value": "name: Claus",
-                                "fieldName": [
-                                    {
-                                        "value": "name",
-                                        "type": "field_name",
-                                        "children": [
-                                            {
-                                                "value": "name",
-                                                "symbol": "TERM_NORMAL",
-                                                "$type": "Terminal"
-                                            }
-                                        ],
-                                        "$type": "UnknownQuery"
-                                    },
-                                    {
-                                        "value": "Claus",
-                                        "type": "value",
-                                        "$type": "UnknownQuery"
-                                    }
-                                ],
-                                "fieldValue": null,
+                                "fieldName": "name",
+                                "fieldValue": "Claus",
+                                "modifier": null,
+                                "termModifier": null,
                                 "$type": "FieldQuery"
                             }
                         ],
@@ -105,31 +51,14 @@
             "$type": "AndQuery"
         },
         {
-            "value": " name: Peter",
             "type": "clauseBasic",
+            "value": " name: Hans",
             "children": [
                 {
-                    "value": "name: Peter",
-                    "fieldName": [
-                        {
-                            "value": "name",
-                            "type": "field_name",
-                            "children": [
-                                {
-                                    "value": "name",
-                                    "symbol": "TERM_NORMAL",
-                                    "$type": "Terminal"
-                                }
-                            ],
-                            "$type": "UnknownQuery"
-                        },
-                        {
-                            "value": "Peter",
-                            "type": "value",
-                            "$type": "UnknownQuery"
-                        }
-                    ],
-                    "fieldValue": null,
+                    "fieldName": "name",
+                    "fieldValue": "Hans",
+                    "modifier": null,
+                    "termModifier": null,
                     "$type": "FieldQuery"
                 }
             ],

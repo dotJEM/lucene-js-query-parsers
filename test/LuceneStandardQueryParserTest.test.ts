@@ -20,8 +20,8 @@ function dump(value, path) {
     writeFileSync(path  || 'dump.json', JSON.stringify(value, track(), 4), 'utf-8');
 }
 
-test('two plus two is four', () => {
-    const [tree, ast] = parser.parse("name: Peter OR name: Anna NOT name: Claus OR name: Peter");
+test('name: Peter OR name: Anna NOT name: Claus OR name: Hans', () => {
+    const [tree, ast] = parser.parse("name: Peter OR name: Anna NOT name: Claus OR name: Hans");
     dump(tree, 'tree.json' );
 
     /*

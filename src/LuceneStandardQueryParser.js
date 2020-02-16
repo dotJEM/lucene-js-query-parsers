@@ -113,60 +113,79 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new OrQuery(ctx.getText(), children);
+        return new OrQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseAnd = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new AndQuery(ctx.getText(), children);
+        return new AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseDefault = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new AndQuery(ctx.getText(), children);
+        return new AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseNot = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
         for (var i = 1; i < children.length; i++)
-            children[i] = new NotQuery(children[i].value, children[i]);
-        return new AndQuery(ctx.getText(), children);
+            children[i] = new NotQuery(children[i]);
+        return new AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.atom = function (ctx) {
-        // atom
-        //   : modifier? field multi_value term_modifier?
-        //   | modifier? field? value term_modifier?
-        //   ;
-        var children = this.mapChildren(ctx);
-        return new FieldQuery(ctx.getText(), children, null);
-    };
-    LuceneStandardQueryVisitor.prototype.field = function (ctx) {
-        return this.mapChildren(ctx).filter(function (q) { return q.type === 'field_name'; })[0];
-    };
-    LuceneStandardQueryVisitor.prototype.value = function (ctx) {
-        return new UnknownQuery(ctx, ctx.parser.ruleNames[ctx.ruleIndex], ctx.getText());
+        var _this = this;
+        if (ctx.children) {
+            var modifier = null;
+            var field = null;
+            var value = null;
+            var termModifier = null;
+            for (var i = 0; i < ctx.children.length; i++) {
+                var child = ctx.children[i];
+                switch (this.rule(child)) {
+                    case 'modifier':
+                        modifier = child.getText();
+                        break;
+                    case 'field':
+                        field = child.children.filter(function (c) { return _this.rule(c) === 'field_name'; })[0].getText();
+                        break;
+                    case 'value':
+                        value = child.getText();
+                        break;
+                    case 'multi_value':
+                        throw new Error('Not implemented');
+                    case 'term_modifler':
+                        termModifier = child.getText();
+                        break;
+                }
+            }
+            return new FieldQuery(field, value, modifier, termModifier);
+        }
+        return null;
     };
     LuceneStandardQueryVisitor.prototype.or_ = function () { };
     LuceneStandardQueryVisitor.prototype.and_ = function () { };
     LuceneStandardQueryVisitor.prototype.not_ = function () { };
     LuceneStandardQueryVisitor.prototype.sep = function () { };
+    LuceneStandardQueryVisitor.prototype.rule = function (ctx) {
+        return this.parser.ruleNames[ctx.ruleIndex];
+    };
     return LuceneStandardQueryVisitor;
 }());
 exports.LuceneStandardQueryVisitor = LuceneStandardQueryVisitor;
 var Query = /** @class */ (function () {
-    function Query(value) {
-        this.value = value;
+    function Query() {
     }
     return Query;
 }());
 var UnknownQuery = /** @class */ (function (_super) {
     __extends(UnknownQuery, _super);
     function UnknownQuery(context, type, value, children) {
-        var _this = _super.call(this, value) || this;
+        var _this = _super.call(this) || this;
         _this.type = type;
+        _this.value = value;
         _this.children = children;
         _this.$type = 'UnknownQuery';
         return _this;
@@ -176,7 +195,8 @@ var UnknownQuery = /** @class */ (function (_super) {
 var Terminal = /** @class */ (function (_super) {
     __extends(Terminal, _super);
     function Terminal(context, value, symbol) {
-        var _this = _super.call(this, value) || this;
+        var _this = _super.call(this) || this;
+        _this.value = value;
         _this.symbol = symbol;
         _this.$type = 'Terminal';
         return _this;
@@ -185,8 +205,8 @@ var Terminal = /** @class */ (function (_super) {
 }(Query));
 var AndQuery = /** @class */ (function (_super) {
     __extends(AndQuery, _super);
-    function AndQuery(value, children) {
-        var _this = _super.call(this, value) || this;
+    function AndQuery(children) {
+        var _this = _super.call(this) || this;
         _this.children = children;
         _this.$type = 'AndQuery';
         return _this;
@@ -195,8 +215,8 @@ var AndQuery = /** @class */ (function (_super) {
 }(Query));
 var OrQuery = /** @class */ (function (_super) {
     __extends(OrQuery, _super);
-    function OrQuery(value, children) {
-        var _this = _super.call(this, value) || this;
+    function OrQuery(children) {
+        var _this = _super.call(this) || this;
         _this.children = children;
         _this.$type = 'OrQuery';
         return _this;
@@ -205,8 +225,8 @@ var OrQuery = /** @class */ (function (_super) {
 }(Query));
 var NotQuery = /** @class */ (function (_super) {
     __extends(NotQuery, _super);
-    function NotQuery(value, child) {
-        var _this = _super.call(this, value) || this;
+    function NotQuery(child) {
+        var _this = _super.call(this) || this;
         _this.child = child;
         _this.$type = 'NotQuery';
         return _this;
@@ -215,10 +235,12 @@ var NotQuery = /** @class */ (function (_super) {
 }(Query));
 var FieldQuery = /** @class */ (function (_super) {
     __extends(FieldQuery, _super);
-    function FieldQuery(value, fieldName, fieldValue) {
-        var _this = _super.call(this, value) || this;
+    function FieldQuery(fieldName, fieldValue, modifier, termModifier) {
+        var _this = _super.call(this) || this;
         _this.fieldName = fieldName;
         _this.fieldValue = fieldValue;
+        _this.modifier = modifier;
+        _this.termModifier = termModifier;
         _this.$type = 'FieldQuery';
         return _this;
     }
