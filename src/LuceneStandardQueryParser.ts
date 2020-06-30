@@ -1,6 +1,7 @@
 import { StandardParser } from './grammar/standard/StandardParser';
 import { StandardLexer } from './grammar/standard/StandardLexer';
 import { InputStream, CommonTokenStream } from 'antlr4';
+import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "./ast/BaseQuery";
 
 export class LuceneStandardQueryParser {
     public parse(query:string) {
@@ -13,24 +14,15 @@ export class LuceneStandardQueryParser {
         const tree = parser.mainQ();
         const ast = (tree as any).accept( new LuceneStandardQueryVisitor(parser) );
 
-
-
         return [tree, ast];
     }
 }
 
 export class LuceneStandardQueryVisitor {
-    //private mappers: any = {};
 
-    constructor(private parser){
+    constructor(private parser){}
 
-        //this.mappers.clauseOr = ctx => this.mapClauseOr(ctx);
-        //this.mappers.clauseAnd = ctx => this.mapClauseAnd(ctx);
-        //this.mappers.clauseNot = ctx => new OrQuery(ctx.getText(), this.mapChildren(ctx));
-
-    }
-
-    public visitChildren(ctx: any): Query {
+    visitChildren(ctx: any): BaseQuery {
 
         const type = ctx.parser.ruleNames[ctx.ruleIndex];
         if(typeof this[type] === 'function'){
@@ -44,7 +36,7 @@ export class LuceneStandardQueryVisitor {
             this.mapChildren(ctx) );
     }
 
-    public visitTerminal(ctx): Query {
+    visitTerminal(ctx): BaseQuery {
         const symbol = this.parser.symbolicNames[ctx.symbol.type];
         switch (symbol) {
             case "LPAREN":
@@ -67,6 +59,11 @@ export class LuceneStandardQueryVisitor {
             case "OR":
             case "NOT":
             case "WS":
+            case "OPERATOR":
+            case "CLAUSE":
+            case "FUZZY":
+            case "BOOST":
+            case "FIELD":
                 return null;
             case "NUMBER":
             case "DATE_TOKEN":
@@ -74,14 +71,9 @@ export class LuceneStandardQueryVisitor {
             case "TERM_TRUNCATED":
             case "PHRASE":
             case "PHRASE_ANYTHING":
-            case "OPERATOR":
             case "ATOM":
             case "MODIFIER":
             case "TMODIFIER":
-            case "CLAUSE":
-            case "FIELD":
-            case "FUZZY":
-            case "BOOST":
             case "QNORMAL":
             case "QPHRASE":
             case "QPHRASETRUNC":
@@ -92,10 +84,10 @@ export class LuceneStandardQueryVisitor {
             case "QDATE":
         }
 
-        return new Terminal(ctx, ctx.getText(), symbol);
+        return new Terminal(ctx.getText(), symbol);
     }
 
-    mapChildren(ctx): Query[] | undefined {
+    mapChildren(ctx): BaseQuery[] | undefined {
         if(!Array.isArray(ctx.children))
             return;
 
@@ -105,12 +97,12 @@ export class LuceneStandardQueryVisitor {
             .filter(c => c !== null && typeof c !== 'undefined');
     }
 
-    mainQ(ctx):Query {
+    mainQ(ctx):BaseQuery {
         const children = this.mapChildren(ctx);
         return children[0];
     }
 
-    clauseOr(ctx: any):Query {
+    clauseOr(ctx: any):BaseQuery {
         const children = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
@@ -118,7 +110,7 @@ export class LuceneStandardQueryVisitor {
         return new OrQuery(children);
     }
 
-    clauseAnd(ctx: any):Query {
+    clauseAnd(ctx: any):BaseQuery {
         const children = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
@@ -126,7 +118,7 @@ export class LuceneStandardQueryVisitor {
         return new AndQuery(children);
     }
 
-    clauseDefault(ctx: any):Query {
+    clauseDefault(ctx: any):BaseQuery {
         const children = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
@@ -134,7 +126,7 @@ export class LuceneStandardQueryVisitor {
         return new AndQuery(children);
     }
 
-    clauseNot(ctx: any):Query {
+    clauseNot(ctx: any):BaseQuery {
         const children = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
@@ -145,7 +137,7 @@ export class LuceneStandardQueryVisitor {
         return new AndQuery(children);
     }
 
-    atom(ctx: any):Query {
+    atom(ctx: any):BaseQuery {
         if(ctx.children) {
             let modifier = null;
             let field = null;
@@ -185,57 +177,3 @@ export class LuceneStandardQueryVisitor {
         return this.parser.ruleNames[ctx.ruleIndex];
     }
 }
-
-class Query {
-    constructor() {
-    }
-}
-
-class UnknownQuery extends Query {
-    public $type = 'UnknownQuery';
-
-    constructor(context, public type, public value, public children?) {
-        super()
-    }
-}
-
-class Terminal extends Query {
-    public $type = 'Terminal';
-
-    constructor(context, public value, public symbol) {
-        super();
-    }
-}
-
-class AndQuery extends Query {
-    public $type = 'AndQuery';
-
-    constructor(public children) {
-        super();
-    }
-}
-
-class OrQuery extends Query {
-    public $type = 'OrQuery';
-
-    constructor(public children) {
-        super();
-    }
-}
-
-class NotQuery extends Query {
-    public $type = 'NotQuery';
-
-    constructor(public child) {
-        super();
-    }
-}
-
-class FieldQuery extends Query {
-    public $type = 'FieldQuery';
-
-    constructor(public fieldName, public fieldValue, public modifier, public termModifier) {
-        super()
-    }
-}
-

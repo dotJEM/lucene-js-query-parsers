@@ -1,69 +1,9 @@
 {
-    "children": [
-        {
-            "type": "clauseBasic",
-            "value": "name: Peter",
-            "children": [
-                {
-                    "fieldName": "name",
-                    "fieldValue": "Peter",
-                    "modifier": null,
-                    "termModifier": null,
-                    "$type": "FieldQuery"
-                }
-            ],
-            "$type": "UnknownQuery"
-        },
-        {
-            "children": [
-                {
-                    "type": "clauseBasic",
-                    "value": " name: Anna",
-                    "children": [
-                        {
-                            "fieldName": "name",
-                            "fieldValue": "Anna",
-                            "modifier": null,
-                            "termModifier": null,
-                            "$type": "FieldQuery"
-                        }
-                    ],
-                    "$type": "UnknownQuery"
-                },
-                {
-                    "child": {
-                        "type": "clauseBasic",
-                        "value": " name: Claus",
-                        "children": [
-                            {
-                                "fieldName": "name",
-                                "fieldValue": "Claus",
-                                "modifier": null,
-                                "termModifier": null,
-                                "$type": "FieldQuery"
-                            }
-                        ],
-                        "$type": "UnknownQuery"
-                    },
-                    "$type": "NotQuery"
-                }
-            ],
-            "$type": "AndQuery"
-        },
-        {
-            "type": "clauseBasic",
-            "value": " name: Hans",
-            "children": [
-                {
-                    "fieldName": "name",
-                    "fieldValue": "Hans",
-                    "modifier": null,
-                    "termModifier": null,
-                    "$type": "FieldQuery"
-                }
-            ],
-            "$type": "UnknownQuery"
-        }
-    ],
-    "$type": "OrQuery"
+    "$type": "Query",
+    "clause": {
+        "$type": "QueryValue",
+        "value": "*",
+        "type": "STAR"
+    },
+    "order": null
 }

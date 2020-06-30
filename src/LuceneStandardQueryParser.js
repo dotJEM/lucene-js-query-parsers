@@ -1,21 +1,9 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
 Object.defineProperty(exports, "__esModule", { value: true });
 var StandardParser_1 = require("./grammar/standard/StandardParser");
 var StandardLexer_1 = require("./grammar/standard/StandardLexer");
 var antlr4_1 = require("antlr4");
+var BaseQuery_1 = require("./ast/BaseQuery");
 var LuceneStandardQueryParser = /** @class */ (function () {
     function LuceneStandardQueryParser() {
     }
@@ -33,11 +21,7 @@ var LuceneStandardQueryParser = /** @class */ (function () {
 }());
 exports.LuceneStandardQueryParser = LuceneStandardQueryParser;
 var LuceneStandardQueryVisitor = /** @class */ (function () {
-    //private mappers: any = {};
     function LuceneStandardQueryVisitor(parser) {
-        //this.mappers.clauseOr = ctx => this.mapClauseOr(ctx);
-        //this.mappers.clauseAnd = ctx => this.mapClauseAnd(ctx);
-        //this.mappers.clauseNot = ctx => new OrQuery(ctx.getText(), this.mapChildren(ctx));
         this.parser = parser;
     }
     LuceneStandardQueryVisitor.prototype.visitChildren = function (ctx) {
@@ -45,7 +29,7 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
         if (typeof this[type] === 'function') {
             return this[type](ctx);
         }
-        return new UnknownQuery(ctx, ctx.parser.ruleNames[ctx.ruleIndex], ctx.getText(), this.mapChildren(ctx));
+        return new BaseQuery_1.UnknownQuery(ctx, ctx.parser.ruleNames[ctx.ruleIndex], ctx.getText(), this.mapChildren(ctx));
     };
     LuceneStandardQueryVisitor.prototype.visitTerminal = function (ctx) {
         var symbol = this.parser.symbolicNames[ctx.symbol.type];
@@ -70,6 +54,11 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
             case "OR":
             case "NOT":
             case "WS":
+            case "OPERATOR":
+            case "CLAUSE":
+            case "FUZZY":
+            case "BOOST":
+            case "FIELD":
                 return null;
             case "NUMBER":
             case "DATE_TOKEN":
@@ -77,14 +66,9 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
             case "TERM_TRUNCATED":
             case "PHRASE":
             case "PHRASE_ANYTHING":
-            case "OPERATOR":
             case "ATOM":
             case "MODIFIER":
             case "TMODIFIER":
-            case "CLAUSE":
-            case "FIELD":
-            case "FUZZY":
-            case "BOOST":
             case "QNORMAL":
             case "QPHRASE":
             case "QPHRASETRUNC":
@@ -94,7 +78,7 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
             case "QANYTHING":
             case "QDATE":
         }
-        return new Terminal(ctx, ctx.getText(), symbol);
+        return new BaseQuery_1.Terminal(ctx.getText(), symbol);
     };
     LuceneStandardQueryVisitor.prototype.mapChildren = function (ctx) {
         var _this = this;
@@ -113,27 +97,27 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new OrQuery(children);
+        return new BaseQuery_1.OrQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseAnd = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new AndQuery(children);
+        return new BaseQuery_1.AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseDefault = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
-        return new AndQuery(children);
+        return new BaseQuery_1.AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.clauseNot = function (ctx) {
         var children = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
         for (var i = 1; i < children.length; i++)
-            children[i] = new NotQuery(children[i]);
-        return new AndQuery(children);
+            children[i] = new BaseQuery_1.NotQuery(children[i]);
+        return new BaseQuery_1.AndQuery(children);
     };
     LuceneStandardQueryVisitor.prototype.atom = function (ctx) {
         var _this = this;
@@ -161,7 +145,7 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
                         break;
                 }
             }
-            return new FieldQuery(field, value, modifier, termModifier);
+            return new BaseQuery_1.FieldQuery(field, value, modifier, termModifier);
         }
         return null;
     };
@@ -175,74 +159,4 @@ var LuceneStandardQueryVisitor = /** @class */ (function () {
     return LuceneStandardQueryVisitor;
 }());
 exports.LuceneStandardQueryVisitor = LuceneStandardQueryVisitor;
-var Query = /** @class */ (function () {
-    function Query() {
-    }
-    return Query;
-}());
-var UnknownQuery = /** @class */ (function (_super) {
-    __extends(UnknownQuery, _super);
-    function UnknownQuery(context, type, value, children) {
-        var _this = _super.call(this) || this;
-        _this.type = type;
-        _this.value = value;
-        _this.children = children;
-        _this.$type = 'UnknownQuery';
-        return _this;
-    }
-    return UnknownQuery;
-}(Query));
-var Terminal = /** @class */ (function (_super) {
-    __extends(Terminal, _super);
-    function Terminal(context, value, symbol) {
-        var _this = _super.call(this) || this;
-        _this.value = value;
-        _this.symbol = symbol;
-        _this.$type = 'Terminal';
-        return _this;
-    }
-    return Terminal;
-}(Query));
-var AndQuery = /** @class */ (function (_super) {
-    __extends(AndQuery, _super);
-    function AndQuery(children) {
-        var _this = _super.call(this) || this;
-        _this.children = children;
-        _this.$type = 'AndQuery';
-        return _this;
-    }
-    return AndQuery;
-}(Query));
-var OrQuery = /** @class */ (function (_super) {
-    __extends(OrQuery, _super);
-    function OrQuery(children) {
-        var _this = _super.call(this) || this;
-        _this.children = children;
-        _this.$type = 'OrQuery';
-        return _this;
-    }
-    return OrQuery;
-}(Query));
-var NotQuery = /** @class */ (function (_super) {
-    __extends(NotQuery, _super);
-    function NotQuery(child) {
-        var _this = _super.call(this) || this;
-        _this.child = child;
-        _this.$type = 'NotQuery';
-        return _this;
-    }
-    return NotQuery;
-}(Query));
-var FieldQuery = /** @class */ (function (_super) {
-    __extends(FieldQuery, _super);
-    function FieldQuery(fieldName, fieldValue, modifier, termModifier) {
-        var _this = _super.call(this) || this;
-        _this.fieldName = fieldName;
-        _this.fieldValue = fieldValue;
-        _this.modifier = modifier;
-        _this.termModifier = termModifier;
-        _this.$type = 'FieldQuery';
-        return _this;
-    }
-    return FieldQuery;
-}(Query));
+//# sourceMappingURL=LuceneStandardQueryParser.js.map
