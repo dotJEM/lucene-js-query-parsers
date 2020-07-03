@@ -6,7 +6,7 @@
   "scripts": {
     "gen-standard": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\standard\\Standard.g4",
     "gen-ordering": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
-    "gen": "npm run gen-standard && npm run gen-standard",
+    "gen": "npm run gen-standard && npm run gen-ordering",
     "tsc": "tsc",
     "build": "npm run gen && npm run tsc",
     "test": "jest"
