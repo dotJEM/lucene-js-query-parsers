@@ -1,17 +1,16 @@
 const path = require('path');
 
 module.exports = {
-    // entry: './src/index.ts',
     entry: {
-        all: './src/index.js',
+        all: './src/all.js',
         dotjem: './src/dotjem.js',
         standard: './src/standard.js',
-        simplified: './src/simplified.js',
+        ordering: './src/ordering.js',
     },
     module: {
         rules: [
             {
-                // use: 'ts-loader',
+                //use: 'ts-loader',
                 exclude: [
                     /node_modules/,
                     /test/
@@ -20,7 +19,7 @@ module.exports = {
         ],
     },
     resolve: {
-        // extensions: [ '.ts', '.js' ],
+        //extensions: [ '.ts', '.js' ],
         extensions: ['.js'],
     },
     output: {

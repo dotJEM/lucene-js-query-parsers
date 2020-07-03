@@ -1,5 +1,5 @@
-import {SimplifiedWithOrderingParser} from './grammar/SimplifiedWithOrdering/SimplifiedWithOrderingParser';
-import {SimplifiedWithOrderingLexer} from './grammar/SimplifiedWithOrdering/SimplifiedWithOrderingLexer';
+import {OrderingParser} from '../grammar/ordering/OrderingParser';
+import {OrderingLexer} from '../grammar/ordering/OrderingLexer';
 import {InputStream, CommonTokenStream} from 'antlr4';
 import {
     BaseQuery,
@@ -11,26 +11,28 @@ import {
     UnknownQuery,
     Query,
     OrderByField, QueryOrder, QueryValue, RangeQuery
-} from "./ast/BaseQuery";
+} from "../ast/BaseQuery";
 
-export class LuceneSimplifiedWithOrderingQueryParser {
+export class LuceneOrderingQueryParser {
     public parse(query: string) {
 
         const input = new InputStream(query);
-        const lexer = new SimplifiedWithOrderingLexer(input);
+        const lexer = new OrderingLexer(input);
         const tokens = new CommonTokenStream(lexer);
-        const parser = new SimplifiedWithOrderingParser(tokens);
+        const parser = new OrderingParser(tokens);
         (parser as any).buildParseTrees = true;
+
+        console.log(parser);
 
         const tree = parser.query();
 
-        const ast = (tree as any).accept(new LuceneSimplifiedWithOrderingQueryVisitor(parser));
+        const ast = (tree as any).accept(new LuceneOrderingQueryVisitor(parser));
 
         return [tree, ast];
     }
 }
 
-export class LuceneSimplifiedWithOrderingQueryVisitor {
+export class LuceneOrderingQueryVisitor {
     private $$ignoredSymbols: any = {
         WS: true,
         LPA: true,

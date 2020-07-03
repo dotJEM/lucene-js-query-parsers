@@ -1,4 +1,4 @@
-grammar SimplifiedWithOrdering;
+grammar Ordering;
 
 /* Inspired by: https://github.com/lrowe/lucenequery */
 

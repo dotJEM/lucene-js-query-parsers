@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var StandardParser_1 = require("./grammar/standard/StandardParser");
-var StandardLexer_1 = require("./grammar/standard/StandardLexer");
+var StandardParser_1 = require("../grammar/standard/StandardParser");
+var StandardLexer_1 = require("../grammar/standard/StandardLexer");
 var antlr4_1 = require("antlr4");
-var BaseQuery_1 = require("./ast/BaseQuery");
+var BaseQuery_1 = require("../ast/BaseQuery");
 var LuceneStandardQueryParser = /** @class */ (function () {
     function LuceneStandardQueryParser() {
     }

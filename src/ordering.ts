@@ -3,7 +3,7 @@ import * as Query from './ast/BaseQuery';
 
 export const dotjem = {
     lucene: {
-        SimplifiedWithOrderingQueryParser: LuceneOrderingQueryParser,
+        OrderingQueryParser: LuceneOrderingQueryParser,
         Query
     }
 };

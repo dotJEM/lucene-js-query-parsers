@@ -1,7 +1,7 @@
-import { StandardParser } from './grammar/standard/StandardParser';
-import { StandardLexer } from './grammar/standard/StandardLexer';
+import { StandardParser } from '../grammar/standard/StandardParser';
+import { StandardLexer } from '../grammar/standard/StandardLexer';
 import { InputStream, CommonTokenStream } from 'antlr4';
-import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "./ast/BaseQuery";
+import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "../ast/BaseQuery";
 
 export class LuceneStandardQueryParser {
     public parse(query:string) {

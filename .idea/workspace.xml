@@ -1,161 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts" line="141" mnemonic="2" />
-  </component>
   <component name="ChangeListManager">
     <list default="true" id="16542570-da81-49e7-870f-2f3bf84fb1ab" name="Default Changelist" comment="working on common AST and multiple outputs">
+      <change afterPath="$PROJECT_DIR$/src/ordering.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dotJem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dotjem.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ast.json" beforeDir="false" afterPath="$PROJECT_DIR$/ast.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generate-simple-parser.bat" beforeDir="false" afterPath="$PROJECT_DIR$/generate-ordering-parser.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneOrderingQueryParser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LuceneStandardQueryParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneStandardQueryParser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/LuceneStandardQueryParser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneStandardQueryParser.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dotjem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dotjem.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrdering.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/grammar/ordering/Ordering.g4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/all.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/simplified.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/standard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/standard.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneOrderingQueryParserTest.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
     </list>
-    <ignored path="$PROJECT_DIR$/.tmp/" />
-    <ignored path="$PROJECT_DIR$/temp/" />
-    <ignored path="$PROJECT_DIR$/tmp/" />
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrdering.g4">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="136">
-                    <caret line="8" column="5" selection-start-line="8" selection-end-line="8" selection-end-column="5" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state>
-                    <caret column="9" selection-start-column="9" selection-end-column="9" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dist/dotJEM-lucene-query-parsers.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret column="12218" selection-end-line="4" selection-end-column="107506" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/webpack.config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/index.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="35" lean-forward="true" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#100#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/dotjem.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="3" column="19" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="19" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/simplified.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
-              <folding>
-                <element signature="e#0#100#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/standard.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-              <folding>
-                <element signature="e#0#100#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-              <folding>
-                <element signature="e#0#107#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/LuceneStandardQueryParser.ts">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-782">
-              <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
-              <folding>
-                <element signature="e#0#67#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/generate-simple-parser.bat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tsconfig.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="18" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -174,41 +43,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="IdeDocumentHistory">
-    <option name="CHANGED_PATHS">
-      <list>
-        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.specs.ts" />
-        <option value="$PROJECT_DIR$/jest.config.json" />
-        <option value="$PROJECT_DIR$/src/LuceneStandardQueryParser.js" />
-        <option value="$PROJECT_DIR$/src/grammar/nsw/nsw.g4" />
-        <option value="$PROJECT_DIR$/src/ast/Query.ts" />
-        <option value="$PROJECT_DIR$/src/ast/QueryBase.ts" />
-        <option value="$PROJECT_DIR$/src/LuceneSimplifiedQueryParser.js" />
-        <option value="$PROJECT_DIR$/test/LuceneSimplifiedQueryParserTest.test.ts" />
-        <option value="$PROJECT_DIR$/src/grammar/standard/Standard.g4" />
-        <option value="$PROJECT_DIR$/src/grammar/dotjem/Simplified.g4" />
-        <option value="$PROJECT_DIR$/src/grammar/simplified/Simplified.g4" />
-        <option value="$PROJECT_DIR$/src/LuceneSimplifiedQueryParser.ts" />
-        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts" />
-        <option value="$PROJECT_DIR$/test/TestTools.ts" />
-        <option value="$PROJECT_DIR$/generate.bat" />
-        <option value="$PROJECT_DIR$/package.json" />
-        <option value="$PROJECT_DIR$/node_modules/antlr4/FileStream.js" />
-        <option value="$PROJECT_DIR$/node_modules/antlr4/CharStreams.js" />
-        <option value="$PROJECT_DIR$/tsconfig.json" />
-        <option value="$PROJECT_DIR$/node_modules/antlr4/index.js" />
-        <option value="$PROJECT_DIR$/src/LuceneStandardQueryParser.ts" />
-        <option value="$PROJECT_DIR$/src/ast/BaseQuery.ts" />
-        <option value="$PROJECT_DIR$/generate-simple-parser.bat" />
-        <option value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
-        <option value="$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrdering.g4" />
-        <option value="$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts" />
-        <option value="$PROJECT_DIR$/webpack.config.js" />
-        <option value="$PROJECT_DIR$/src/index.ts" />
-        <option value="$PROJECT_DIR$/src/standard.ts" />
-      </list>
-    </option>
-  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="125" />
     <option name="y" value="116" />
@@ -216,41 +50,6 @@
     <option name="height" value="1262" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
-  <component name="ProjectView">
-    <navigator proportions="" version="1">
-      <foldersAlwaysOnTop value="true" />
-    </navigator>
-    <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="lucene-query-parsers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lucene-query-parsers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lucene-query-parsers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lucene-query-parsers" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lucene-query-parsers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lucene-query-parsers" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="grammar" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="lucene-query-parsers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="lucene-query-parsers" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-    </panes>
-  </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -263,55 +62,38 @@
     <property name="ts.external.directory.path" value="G:\Workspace\Github\lucene-query-parsers\node_modules\typescript\lib" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="G:\Workspace\Github\lucene-query-parsers\lucene-js-query-parsers" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="G:\Workspace\Github\lucene-query-parsers\src" />
       <recent name="G:\Workspace\Github\lucene-query-parsers\src\grammar" />
       <recent name="G:\Workspace\Github\lucene-query-parsers\test" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="F:\OSS\Github\lucene-js-query-parsers\src\parsers" />
+      <recent name="G:\Workspace\Github\lucene-query-parsers\lucene-js-query-parsers" />
+    </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
-  <component name="RunManager" selected="Jest.born: [-5days TO *]">
-    <configuration name="age: [2345 TO 2110]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.name: Peter Hansen (1)">
+    <configuration name="LuceneOrderingQueryParserTest.test.ts" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
-      <test-names>
-        <test-name value="age: [2345 TO 2110]" />
-      </test-names>
+      <scope-kind value="TEST_FILE" />
+      <test-file value="$PROJECT_DIR$/test/LuceneOrderingQueryParserTest.test.ts" />
       <method v="2" />
     </configuration>
-    <configuration name="born: [-5days TO *]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="LuceneSimplifiedWithOrderingQueryParserTest.test.ts" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
-      <scope-kind value="TEST" />
+      <scope-kind value="TEST_FILE" />
       <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
-      <test-names>
-        <test-name value="born: [-5days TO *]" />
-      </test-names>
       <method v="2" />
     </configuration>
-    <configuration name="born: [5days TO *]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+    <configuration name="age: [5 TO 9]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
       <node-options value="" />
       <jest-package value="$PROJECT_DIR$/node_modules/jest" />
@@ -320,33 +102,7 @@
       <scope-kind value="TEST" />
       <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
       <test-names>
-        <test-name value="born: [5days TO *]" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="born: [NOW-5D TO *]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
-      <test-names>
-        <test-name value="born: [NOW-5D TO *]" />
-      </test-names>
-      <method v="2" />
-    </configuration>
-    <configuration name="born: [+5days TO *]" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
-      <node-interpreter value="project" />
-      <node-options value="" />
-      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
-      <working-dir value="$PROJECT_DIR$" />
-      <envs />
-      <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
-      <test-names>
-        <test-name value="born: [+5days TO *]" />
+        <test-name value="age: [5 TO 9]" />
       </test-names>
       <method v="2" />
     </configuration>
@@ -360,13 +116,39 @@
       <scope-kind value="ALL" />
       <method v="2" />
     </configuration>
+    <configuration name="name: Peter Hansen (1)" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/test/LuceneOrderingQueryParserTest.test.ts" />
+      <test-names>
+        <test-name value="name: Peter Hansen" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="name: Peter Hansen" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
+      <test-names>
+        <test-name value="name: Peter Hansen" />
+      </test-names>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Jest.born: [-5days TO *]" />
-        <item itemvalue="Jest.born: [NOW-5D TO *]" />
-        <item itemvalue="Jest.born: [+5days TO *]" />
-        <item itemvalue="Jest.born: [5days TO *]" />
-        <item itemvalue="Jest.age: [2345 TO 2110]" />
+        <item itemvalue="Jest.name: Peter Hansen (1)" />
+        <item itemvalue="Jest.LuceneOrderingQueryParserTest.test.ts" />
+        <item itemvalue="Jest.name: Peter Hansen" />
+        <item itemvalue="Jest.LuceneSimplifiedWithOrderingQueryParserTest.test.ts" />
+        <item itemvalue="Jest.age: [5 TO 9]" />
       </list>
     </recent_temporary>
   </component>
@@ -404,41 +186,6 @@
     <option name="localTasksCounter" value="2" />
     <servers />
   </component>
-  <component name="TestHistory">
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 47m 00s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 47m 43s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 47m 59s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 50m 14s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 50m 32s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 11h 52m 39s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 12h 00m 36s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 12h 02m 26s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 12h 03m 01s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-    <history-entry file="born__[-5days_TO__] - 2020.03.25 at 12h 11m 09s.xml">
-      <configuration name="born: [-5days TO *]" configurationId="JavaScriptTestRunnerJest" />
-    </history-entry>
-  </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85316000" />
-  </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
@@ -448,55 +195,25 @@
       <is-autoscroll-to-source value="true" />
     </todo-panel>
   </component>
-  <component name="ToolWindowManager">
-    <frame x="125" y="116" width="2280" height="1262" extended-state="0" />
-    <editor active="true" />
-    <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19090098" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="npm" order="2" side_tool="true" />
-      <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49947312" weight="0.32953465" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.642255" weight="0.3048433" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49894625" weight="0.45868945" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" weight="0.32953465" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.49910793" visible="true" weight="0.32949513" />
-      <window_info anchor="bottom" id="TypeScript" order="9" sideWeight="0.49776986" weight="0.32949513" />
-      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.50089204" side_tool="true" visible="true" weight="0.32949513" />
-      <window_info anchor="bottom" id="Tool Output" order="12" sideWeight="0.49910793" weight="0.32949513" />
-      <window_info anchor="bottom" id="ANTLR Preview" order="13" sideWeight="0.49910793" weight="0.32949513" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout>
-  </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
     <option name="exactExcludedFiles">
       <list>
-        <option value="$PROJECT_DIR$/test/TestTools.js" />
-        <option value="$PROJECT_DIR$/src/ast/BaseQuery.js" />
-        <option value="$PROJECT_DIR$/src/index.js.map" />
-        <option value="$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.js.map" />
-        <option value="$PROJECT_DIR$/src/LuceneStandardQueryParser.js.map" />
-        <option value="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.js.map" />
-        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js.map" />
-        <option value="$PROJECT_DIR$/src/LuceneStandardQueryParser.js" />
-        <option value="$PROJECT_DIR$/test/TestTools.js.map" />
-        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" />
-        <option value="$PROJECT_DIR$/src/ast/BaseQuery.js.map" />
-        <option value="$PROJECT_DIR$/src/index.js" />
-        <option value="$PROJECT_DIR$/src/dotJem.js" />
-        <option value="$PROJECT_DIR$/src/dotJem.js.map" />
-        <option value="$PROJECT_DIR$/src/simplified.js" />
-        <option value="$PROJECT_DIR$/src/simplified.js.map" />
         <option value="$PROJECT_DIR$/src/standard.js" />
+        <option value="$PROJECT_DIR$/src/simplified.js" />
+        <option value="$PROJECT_DIR$/src/parsers/LuceneStandardQueryParser.js.map" />
+        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" />
+        <option value="$PROJECT_DIR$/src/ast/BaseQuery.js" />
+        <option value="$PROJECT_DIR$/src/ast/BaseQuery.js.map" />
+        <option value="$PROJECT_DIR$/test/TestTools.js.map" />
+        <option value="$PROJECT_DIR$/test/TestTools.js" />
+        <option value="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js.map" />
+        <option value="$PROJECT_DIR$/src/simplified.js.map" />
+        <option value="$PROJECT_DIR$/src/all.js" />
+        <option value="$PROJECT_DIR$/src/dotjem.js.map" />
         <option value="$PROJECT_DIR$/src/standard.js.map" />
+        <option value="$PROJECT_DIR$/src/dotjem.js" />
+        <option value="$PROJECT_DIR$/src/all.js.map" />
       </list>
     </option>
   </component>
@@ -507,296 +224,30 @@
     <MESSAGE value="working on common AST and multiple outputs" />
     <option name="LAST_COMMIT_MESSAGE" value="working on common AST and multiple outputs" />
   </component>
-  <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jest.config.json.xxx" />
-    <entry file="file://$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="38" selection-start-line="2" selection-start-column="38" selection-end-line="2" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/jest-runner-tsc/dist/runTsc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="76" column="105" selection-start-line="76" selection-start-column="105" selection-end-line="76" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tree.json" />
-    <entry file="file://$PROJECT_DIR$/src/LuceneStandardQueryParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="135" column="38" selection-start-line="135" selection-start-column="38" selection-end-line="135" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/antlr.bat">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jest.config.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedLexer.js" />
-    <entry file="file://$PROJECT_DIR$/src/ast/Query.js" />
-    <entry file="file://$PROJECT_DIR$/ast.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedParser.js" />
-    <entry file="file://$PROJECT_DIR$/src/grammar/dotjem/DotJem.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="14" selection-start-column="8" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/standard/Standard.interp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="21" column="4" lean-forward="true" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/TestTools.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/Token.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="126" column="47" selection-start-line="126" selection-start-column="47" selection-end-line="126" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/ParserRuleContext.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="198" column="10" selection-start-line="198" selection-start-column="10" selection-end-line="198" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/tree/Tree.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="143" column="44" selection-start-line="143" selection-start-column="44" selection-end-line="143" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/RuleContext.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="87" column="28" selection-start-line="87" selection-start-column="28" selection-end-line="87" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/FileStream.js" />
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/InputStream.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2125">
-          <caret line="125" column="15" selection-start-line="125" selection-start-column="15" selection-end-line="125" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/CharStreams.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/standard/StandardParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3519">
-          <caret line="207" column="62" selection-start-line="207" selection-start-column="52" selection-end-line="207" selection-end-column="62" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/ast/BaseQuery.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generate.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="66" lean-forward="true" selection-start-column="66" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/standard/Standard.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1955">
-          <caret line="256" selection-start-line="256" selection-end-line="257" />
-          <folding>
-            <element signature="e#2270#2459#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrderingParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="158" column="17" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="17" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="301">
-          <caret line="130" column="24" selection-start-line="130" selection-start-column="24" selection-end-line="130" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/dotJEM-lucene-query-parsers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret column="12218" selection-end-line="4" selection-end-column="107506" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tsconfig.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="18" selection-start-line="4" selection-start-column="15" selection-end-line="4" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/antlr4/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/generate-simple-parser.bat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="12" selection-start-line="2" selection-start-column="12" selection-end-line="2" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="9" selection-start-column="9" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#0#107#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/LuceneStandardQueryParser.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-782">
-          <caret line="86" column="28" selection-start-line="86" selection-start-column="28" selection-end-line="86" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#67#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrdering.g4">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="5" selection-start-line="8" selection-end-line="8" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/webpack.config.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="31" selection-start-line="26" selection-start-column="31" selection-end-line="26" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/index.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="35" lean-forward="true" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dotjem.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="13" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/simplified.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#0#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/standard.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#100#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+  <component name="WindowStateProjectService">
+    <state x="483" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1593590571795">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state x="483" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593590571795" />
+    <state x="562" y="179" key="CommitChangelistDialog2" timestamp="1593589897509">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state x="562" y="179" key="CommitChangelistDialog2/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593589897509" />
+    <state width="1197" height="345" key="GridCell.Tab.0.bottom" timestamp="1593761057831">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state width="1197" height="345" key="GridCell.Tab.0.bottom/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593761057831" />
+    <state width="1197" height="345" key="GridCell.Tab.0.center" timestamp="1593761057829">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state width="1197" height="345" key="GridCell.Tab.0.center/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593761057829" />
+    <state width="1197" height="345" key="GridCell.Tab.0.left" timestamp="1593761057829">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state width="1197" height="345" key="GridCell.Tab.0.left/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593761057829" />
+    <state width="1197" height="345" key="GridCell.Tab.0.right" timestamp="1593761057830">
+      <screen x="0" y="0" width="1920" height="1170" />
+    </state>
+    <state width="1197" height="345" key="GridCell.Tab.0.right/-1200.0.1200.1570/1920.0.1200.1570/0.0.1920.1170@0.0.1920.1170" timestamp="1593761057830" />
   </component>
 </project>
