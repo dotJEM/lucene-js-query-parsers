@@ -4,6 +4,11 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
+    "gen-standard": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
+    "gen-ordering": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
+    "gen": "npm run gen-standard && npm run gen-standard",
+    "tsc": "tsc",
+    "build": "npm run gen && npm run tsc",
     "test": "jest"
   },
   "keywords": [],

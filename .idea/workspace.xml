@@ -2,24 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="16542570-da81-49e7-870f-2f3bf84fb1ab" name="Default Changelist" comment="working on common AST and multiple outputs">
-      <change afterPath="$PROJECT_DIR$/src/ordering.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ast.json" beforeDir="false" afterPath="$PROJECT_DIR$/ast.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generate-simple-parser.bat" beforeDir="false" afterPath="$PROJECT_DIR$/generate-ordering-parser.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LuceneSimplifiedWithOrderingQueryParser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneOrderingQueryParser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LuceneStandardQueryParser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneStandardQueryParser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/LuceneStandardQueryParser.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/parsers/LuceneStandardQueryParser.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dotjem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dotjem.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/grammar/SimplifiedWithOrdering/SimplifiedWithOrdering.g4" beforeDir="false" afterPath="$PROJECT_DIR$/src/grammar/ordering/Ordering.g4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/all.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/simplified.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/standard.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/standard.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/LuceneSimplifiedWithOrderingQueryParserTest.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneOrderingQueryParserTest.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts" beforeDir="false" afterPath="$PROJECT_DIR$/test/LuceneStandardQueryParserTest.test.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/Ordering.interp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/Ordering.tokens" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/OrderingLexer.interp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/OrderingLexer.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/OrderingLexer.tokens" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/OrderingListener.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/grammar/ordering/OrderingParser.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +42,7 @@
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
