@@ -28,4 +28,5 @@ jobs:
     - run: npm ci
     - run: tools\antlr -Dlanguage=JavaScript src\grammar\ordering\Ordering.g4
     - run: tools\antlr -Dlanguage=JavaScript src\grammar\standard\Standard.g4
+    - run: tsc
     - run: npm run jest
