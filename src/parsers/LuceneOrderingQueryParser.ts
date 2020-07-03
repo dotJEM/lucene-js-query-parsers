@@ -14,21 +14,15 @@ import {
 } from "../ast/BaseQuery";
 
 export class LuceneOrderingQueryParser {
-    public parse(query: string) {
-
+    public parse(query: string, processSyntaxTree: ((tree: any) => any) = (tree => tree)) {
         const input = new InputStream(query);
         const lexer = new OrderingLexer(input);
         const tokens = new CommonTokenStream(lexer);
         const parser = new OrderingParser(tokens);
         (parser as any).buildParseTrees = true;
 
-        console.log(parser);
-
-        const tree = parser.query();
-
-        const ast = (tree as any).accept(new LuceneOrderingQueryVisitor(parser));
-
-        return [tree, ast];
+        const tree = processSyntaxTree(parser.query());
+        return tree.accept(new LuceneOrderingQueryVisitor(parser));
     }
 }
 
@@ -39,8 +33,7 @@ export class LuceneOrderingQueryVisitor {
         RPA: true
     };
 
-    constructor(private parser) {
-    }
+    constructor(private parser) {}
 
     visitChildren(ctx: any): BaseQuery {
         const type = ctx.parser.ruleNames[ctx.ruleIndex];

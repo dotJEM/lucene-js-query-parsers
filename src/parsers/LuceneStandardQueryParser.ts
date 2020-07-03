@@ -2,19 +2,18 @@ import { StandardParser } from '../grammar/standard/StandardParser';
 import { StandardLexer } from '../grammar/standard/StandardLexer';
 import { InputStream, CommonTokenStream } from 'antlr4';
 import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "../ast/BaseQuery";
+import {LuceneOrderingQueryVisitor} from "./LuceneOrderingQueryParser";
 
 export class LuceneStandardQueryParser {
-    public parse(query:string) {
+    public parse(query: string, processSyntaxTree: ((tree: any) => any) = (tree => tree)) {
         const input = new InputStream(query);
         const lexer = new StandardLexer(input);
         const tokens = new CommonTokenStream(lexer);
         const parser = new StandardParser(tokens);
         (parser as any).buildParseTrees = true;
-        
-        const tree = parser.mainQ();
-        const ast = (tree as any).accept( new LuceneStandardQueryVisitor(parser) );
 
-        return [tree, ast];
+        const tree = processSyntaxTree(parser.mainQ());
+        return tree.accept(new LuceneStandardQueryVisitor(parser));
     }
 }
 
