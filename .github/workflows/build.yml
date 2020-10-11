@@ -23,5 +23,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: call generate-ordering-parser.bat
+    - run: tools\antlr -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4
     - run: jest
