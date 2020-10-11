@@ -28,6 +28,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: tools\antlr -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4
+    - run: java -jar tools/antlr-4.8-complete.jar -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4
     - run: tsc  
     - run: jest
