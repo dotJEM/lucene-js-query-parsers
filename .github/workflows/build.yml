@@ -28,6 +28,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: java -jar tools/antlr-4.8-complete.jar -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4
+    - shell: bash
+      run: call generate-ordering-parser.bat
     - run: tsc  
     - run: jest
