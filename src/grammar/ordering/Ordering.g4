@@ -32,6 +32,7 @@ rangeClause :
     WS TO WS
     to = simple_value WS?
     RSBR;
+matchAllClause: STAR WS? COLON WS? STAR;
 
 //Order
 orderingClause    : WS? ORDER WS BY WS orderingField ( WS? COMMA WS? orderingField )* WS?;

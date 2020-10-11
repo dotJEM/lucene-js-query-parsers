@@ -10,7 +10,11 @@ import {
     Terminal,
     UnknownQuery,
     Query,
-    OrderByField, QueryOrder, QueryValue, RangeQuery
+    OrderByField,
+    QueryOrder,
+    QueryValue,
+    RangeQuery,
+    MatchAllQuery
 } from "../ast/BaseQuery";
 
 export class LuceneOrderingQueryParser {
@@ -111,6 +115,10 @@ export class LuceneOrderingQueryVisitor {
             return children[0];
 
         return new AndQuery(children);
+    }
+
+    matchAllClause(ctx): BaseQuery{
+        return new MatchAllQuery();
     }
 
     orderingClause(ctx): BaseQuery {

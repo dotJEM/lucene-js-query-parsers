@@ -10,6 +10,26 @@ export class BaseQuery {
     }
 }
 
+export class MatchAllQuery extends BaseQuery {
+    public $type = 'MatchAllQuery';
+
+    constructor(){
+        super();
+    }
+
+    toString() {
+        return "*:*";
+    }
+
+    accept(visitor){
+        if(typeof visitor.visitMatchAllQuery === "function"){
+            return visitor.visitMatchAllQuery(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+
 export class Query extends BaseQuery {
     public $type = 'Query';
 
