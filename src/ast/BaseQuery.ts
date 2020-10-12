@@ -22,13 +22,12 @@ export class AnyQuery extends BaseQuery {
     }
 
     accept(visitor){
-        if(typeof visitor.visitMatchAllQuery === "function"){
+        if(typeof visitor.visitAnyQuery === "function"){
             return visitor.visitAnyQuery(this);
         }
         return super.accept(visitor);
     }
 }
-
 
 export class Query extends BaseQuery {
     public $type = 'Query';

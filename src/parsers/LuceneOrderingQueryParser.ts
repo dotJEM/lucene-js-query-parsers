@@ -115,8 +115,7 @@ export class LuceneOrderingQueryVisitor {
         return new AndQuery(children);
     }
 
-    anyClause(): BaseQuery{
-        console.log("VISIT Any Clause");
+    anyClause(): BaseQuery {
         return new AnyQuery();
     }
 
