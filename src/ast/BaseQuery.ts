@@ -10,8 +10,8 @@ export class BaseQuery {
     }
 }
 
-export class MatchAllQuery extends BaseQuery {
-    public $type = 'MatchAllQuery';
+export class AnyQuery extends BaseQuery {
+    public $type = 'AnyQuery';
 
     constructor(){
         super();
@@ -23,7 +23,7 @@ export class MatchAllQuery extends BaseQuery {
 
     accept(visitor){
         if(typeof visitor.visitMatchAllQuery === "function"){
-            return visitor.visitMatchAllQuery(this);
+            return visitor.visitAnyQuery(this);
         }
         return super.accept(visitor);
     }

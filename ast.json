@@ -1,24 +1,7 @@
 {
     "$type": "Query",
     "clause": {
-        "$type": "AndQuery",
-        "children": [
-            {
-                "$type": "FieldQuery",
-                "fieldName": "name",
-                "fieldValue": {
-                    "$type": "QueryValue",
-                    "value": "Peter",
-                    "type": "TERM"
-                },
-                "operator": ":"
-            },
-            {
-                "$type": "QueryValue",
-                "value": "Hansen",
-                "type": "TERM"
-            }
-        ]
+        "$type": "AnyQuery"
     },
     "order": null
 }

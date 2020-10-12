@@ -14,7 +14,7 @@ import {
     QueryOrder,
     QueryValue,
     RangeQuery,
-    MatchAllQuery
+    AnyQuery
 } from "../ast/BaseQuery";
 
 export class LuceneOrderingQueryParser {
@@ -54,8 +54,6 @@ export class LuceneOrderingQueryVisitor {
             ctx.getText(),
             this.mapChildren(ctx));
     }
-
-
 
     visitTerminal(ctx): BaseQuery {
         const symbol = this.parser.symbolicNames[ctx.symbol.type];
@@ -117,8 +115,9 @@ export class LuceneOrderingQueryVisitor {
         return new AndQuery(children);
     }
 
-    matchAllClause(ctx): BaseQuery{
-        return new MatchAllQuery();
+    anyClause(): BaseQuery{
+        console.log("VISIT Any Clause");
+        return new AnyQuery();
     }
 
     orderingClause(ctx): BaseQuery {

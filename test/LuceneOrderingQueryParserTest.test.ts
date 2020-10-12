@@ -6,25 +6,20 @@ const parser = new LuceneOrderingQueryParser();
 
 function it(query: string, fn?: any|Query) {
     test(query, () => {
-        const [tree, ast] = parser.parse(query);
+        const ast = parser.parse(query);
         //console.log(query);
+        console.log(ast);
         dump(ast, 'ast.json' );
     });
 }
 
+it('*:*', () => {});
+
+
+
 it('age: [5 TO 9]', noop);
 it('age: [5 TO *]', noop);
 it('age: [* TO 9]', noop);
-it('age: [2345 TO 2110]', noop);
-
-// it('age: [5 - 9]', noop);
-// it('age: [5 - *]', noop);
-// it('age: [* - 9]', noop);
-// it('age: [2345 - 2110]', noop);
-
-it('age: [2345 TO 2110]', noop);
-it('age: [2345 TO 2110]', noop);
-it('age: [2345 TO 2110]', noop);
 it('age: [2345 TO 2110]', noop);
 it('height: [1.6 TO 2.0]', noop);
 it('height: [* TO 2.0]', noop);
@@ -51,10 +46,6 @@ it('$created: [22 TO *]', () => {});
 it('ship.name: FooBarasd AND $version: [6 TO 10] AND $created: [2020-03-02T21:24:00+01:00 TO 2020-03-25] AND contentType: notification AND id: 123', () => {});
 it('ship.name: FooBarasd AND $created: [2020-03-02T21:24:00+01:00 TO 2020-03-25] AND contentType: notification AND id: 123', () => {});
 it('$version: [6.6 TO *]', () => {});
-// it('$version: [61233 - 10123123123]', () => {});
 it('$version: [6 TO * ]', () => {});
 it('$version: [ 6 TO * ]', () => {});
-it('*:*', () => {});
-
-
 it('name: Peter Hansen', () => {});
