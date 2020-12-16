@@ -15,7 +15,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "antlr4": "^4.8.0"
+    "antlr4": "^4.9.0"
   },
   "devDependencies": {
     "@types/jest": "^25.1.1",
