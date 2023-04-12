@@ -8,7 +8,7 @@
     "gen-ordering": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
     "gen": "npm run gen-standard && npm run gen-ordering",
     "tsc": "tsc",
-    "build": "npm run gen-ordering && npm run tsc",
+    "build": "npm run gen && npm run tsc",
     "test": "jest"
   },
   "keywords": [],
