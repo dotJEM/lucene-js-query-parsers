@@ -1,6 +1,6 @@
 const path = require('path');
 
-module.exports = {
+export default {
     devtool: 'source-map',
     entry: {
         all: './src/all.js',

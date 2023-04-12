@@ -1,5 +1,4 @@
 import {writeFileSync} from "fs";
-import {Query} from "../src/ast/BaseQuery";
 
 export function track() {
     const cache: any = [];

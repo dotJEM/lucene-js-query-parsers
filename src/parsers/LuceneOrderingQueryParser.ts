@@ -55,7 +55,7 @@ export class LuceneOrderingQueryVisitor {
             this.mapChildren(ctx));
     }
 
-    visitTerminal(ctx): BaseQuery {
+    visitTerminal(ctx): Terminal {
         const symbol = this.parser.symbolicNames[ctx.symbol.type];
         if(this.$$ignoredSymbols[symbol])
             return null;
@@ -63,14 +63,14 @@ export class LuceneOrderingQueryVisitor {
         return new Terminal(ctx.getText(), symbol);
     }
 
-    query(ctx): BaseQuery {
+    query(ctx): Query {
         const clause = ctx.clause.accept(this);
         const order = ctx.order && ctx.order.accept(this);
         return new Query(clause, order);
     }
 
     defaultClause(ctx): BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
 
@@ -79,7 +79,7 @@ export class LuceneOrderingQueryVisitor {
     }
 
     orClause(ctx): BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
 
@@ -88,7 +88,7 @@ export class LuceneOrderingQueryVisitor {
     }
 
     andClause(ctx): BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
 
@@ -97,36 +97,36 @@ export class LuceneOrderingQueryVisitor {
     }
 
     notClause(ctx): BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
 
-        for (let i = 1; i < children.length; i++)
+        for (let i: number = 1; i < children.length; i++)
             children[i] = new NotQuery(children[i]);
 
         return new AndQuery(children);
     }
 
     basicClause(ctx): BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if (children.length < 2)
             return children[0];
 
         return new AndQuery(children);
     }
 
-    anyClause(): BaseQuery {
+    anyClause(): AnyQuery {
         return new AnyQuery();
     }
 
-    orderingClause(ctx): BaseQuery {
-        const children = this
+    orderingClause(ctx): QueryOrder {
+        const children: BaseQuery[] = this
             .mapChildren(ctx)
             .filter(child => child.$type === 'OrderField');
         return new QueryOrder(children);
     }
 
-    orderingField(ctx): BaseQuery {
+    orderingField(ctx): OrderByField {
         const field = ctx.fieldName.accept(this);
         const direction = ctx.direction && ctx.direction.getText();
         return new OrderByField(field, direction);
@@ -136,14 +136,14 @@ export class LuceneOrderingQueryVisitor {
         return this.mapChildren(ctx)[0];
     }
 
-    rangeClause(ctx) {
+    rangeClause(ctx): RangeQuery {
         const field = ctx.fieldName.accept(this);
         const from = ctx.from.accept(this);
         const to = ctx.to.accept(this);
         return new RangeQuery(field, from, to, 'LSBR', 'RSBR');
     }
 
-    field(ctx) {
+    field(ctx): FieldQuery {
         const field = ctx.fieldName.accept(this);
         const operator = ctx.fieldOperator.accept(this);
         const value = ctx.fieldValue.accept(this);
@@ -151,14 +151,14 @@ export class LuceneOrderingQueryVisitor {
         return new FieldQuery(field, value, operator);
     }
 
-    simple_value(ctx) {
+    simple_value(ctx): QueryValue {
         console.log(ctx.children);
-        const rule = <Terminal>this.mapChildren(ctx)[0];
+        const rule: Terminal = <Terminal>this.mapChildren(ctx)[0];
         const text = ctx.getText();
         return new QueryValue(text, rule.symbol);
     }
 
-    value(ctx) {
+    value(ctx): QueryValue {
         const rule = <Terminal>this.mapChildren(ctx)[0];
         const text = ctx.getText();
         return new QueryValue(text, rule.symbol);
@@ -172,9 +172,9 @@ export class LuceneOrderingQueryVisitor {
         return ctx.getText();
     }
 
-    orOperator(){}
-    andOperator(){}
-    notOperator(){}
+    orOperator(): void{}
+    andOperator(): void{}
+    notOperator(): void{}
 
     mapChildren(ctx): BaseQuery[] | undefined {
         if (!Array.isArray(ctx.children))

@@ -97,12 +97,12 @@ export class LuceneStandardQueryVisitor {
     }
 
     mainQ(ctx):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         return children[0];
     }
 
     clauseOr(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -110,7 +110,7 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseAnd(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -118,7 +118,7 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseDefault(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -126,11 +126,11 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseNot(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
-        for (let i = 1; i < children.length; i++)
+        for (let i: number = 1; i < children.length; i++)
             children[i] = new NotQuery(children[i]);
 
         return new AndQuery(children);
@@ -143,7 +143,7 @@ export class LuceneStandardQueryVisitor {
             let value = null;
             let termModifier = null;
 
-            for(let i = 0; i<ctx.children.length; i++){
+            for(let i: number = 0; i<ctx.children.length; i++){
                 const child = ctx.children[i];
                 switch (this.rule(child)) {
                     case 'modifier':
@@ -167,10 +167,10 @@ export class LuceneStandardQueryVisitor {
         return null;
     }
 
-    or_() {}
-    and_() {}
-    not_() {}
-    sep() {}
+    or_(): void {}
+    and_(): void {}
+    not_(): void {}
+    sep(): void {}
 
     private rule(ctx){
         return this.parser.ruleNames[ctx.ruleIndex];

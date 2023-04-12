@@ -1,7 +1,7 @@
 
 
 export class BaseQuery {
-    public $type = 'BaseQuery';
+    public $type: string = 'BaseQuery';
 
     constructor() {}
 
@@ -11,13 +11,13 @@ export class BaseQuery {
 }
 
 export class AnyQuery extends BaseQuery {
-    public $type = 'AnyQuery';
+    public $type: string = 'AnyQuery';
 
     constructor(){
         super();
     }
 
-    toString() {
+    toString(): string {
         return "*:*";
     }
 
@@ -30,13 +30,13 @@ export class AnyQuery extends BaseQuery {
 }
 
 export class Query extends BaseQuery {
-    public $type = 'Query';
+    public $type: string = 'Query';
 
-    constructor(public clause, public order?){
+    constructor(public clause: BaseQuery, public order?){
         super();
     }
 
-    toString() {
+    toString(): string {
         if(this.order){
             return `${this.clause} ORDER BY ${this.order}`;
         }
@@ -52,13 +52,13 @@ export class Query extends BaseQuery {
 }
 
 export class QueryOrder extends BaseQuery {
-    public $type = 'QueryOrder';
+    public $type: string = 'QueryOrder';
 
-    constructor(public clauses){
+    constructor(public clauses: BaseQuery[]){
         super();
     }
 
-    toString() {
+    toString(): string {
         return this.clauses.map(c => c.toString()).join(',');
     }
 
@@ -71,16 +71,16 @@ export class QueryOrder extends BaseQuery {
 }
 
 export class OrderByField extends BaseQuery {
-    public $type = 'OrderByField';
+    public $type: string = 'OrderByField';
     public $orderSet: boolean;
 
-    constructor(public field:string, public order?:string){
+    constructor(public field: string, public order?: string){
         super();
         this.$orderSet = typeof order !== "undefined";
         this.order = order || "ASC";
     }
 
-    toString() {
+    toString(): string {
         if(this.$orderSet){
             return `${this.field} ${this.order}`;
         }
@@ -96,13 +96,13 @@ export class OrderByField extends BaseQuery {
 }
 
 export class UnknownQuery extends BaseQuery {
-    public $type = 'UnknownQuery';
+    public $type: string = 'UnknownQuery';
 
     constructor(context, public type, public value, public children?) {
         super();
     }
 
-    toString() {
+    toString(): string {
         return `<UNKNOWN QUERY OBJECT: type=${this.type}, value=${this.value}>`;
     }
 
@@ -115,13 +115,13 @@ export class UnknownQuery extends BaseQuery {
 }
 
 export class RangeQuery extends BaseQuery {
-    public $type = 'RangeQuery';
+    public $type: string = 'RangeQuery';
 
     constructor(public field: string, public from: QueryValue, public to: QueryValue, public startType, public endType){
         super();
     }
 
-    toString() {
+    toString(): string {
         const lb = this.startType === "LSBR" ? '[' : '{';
         const rb = this.endType === "RSBR" ? ']' : '}';
         return `${this.field}:${lb}${this.from} TO ${this.to}${rb}`;
@@ -136,13 +136,13 @@ export class RangeQuery extends BaseQuery {
 }
 
 export class Terminal extends BaseQuery {
-    public $type = 'Terminal';
+    public $type: string = 'Terminal';
 
     constructor(public value, public symbol) {
         super();
     }
 
-    toString() {
+    toString(): string {
         return `<TERMINAL: value=${this.value}, symbol=${this.symbol}>`;
     }
 
@@ -155,13 +155,13 @@ export class Terminal extends BaseQuery {
 }
 
 export class AndQuery extends BaseQuery {
-    public $type = 'AndQuery';
+    public $type: string = 'AndQuery';
 
-    constructor(public children) {
+    constructor(public children: BaseQuery[]) {
         super();
     }
 
-    toString() {
+    toString(): string {
         return `(${this.children.map(c => c.toString()).join(' AND ')})`;
     }
 
@@ -174,13 +174,13 @@ export class AndQuery extends BaseQuery {
 }
 
 export class OrQuery extends BaseQuery {
-    public $type = 'OrQuery';
+    public $type: string = 'OrQuery';
 
-    constructor(public children) {
+    constructor(public children: BaseQuery[]) {
         super();
     }
 
-    toString() {
+    toString(): string {
         return `(${this.children.map(c => c.toString()).join(' OR ')})`;
     }
 
@@ -193,13 +193,13 @@ export class OrQuery extends BaseQuery {
 }
 
 export class NotQuery extends BaseQuery {
-    public $type = 'NotQuery';
+    public $type: string = 'NotQuery';
 
-    constructor(public child) {
+    constructor(public child: BaseQuery) {
         super();
     }
 
-    toString() {
+    toString(): string {
         return `NOT ${this.child}`;
     }
 
@@ -212,13 +212,13 @@ export class NotQuery extends BaseQuery {
 }
 
 export class FieldQuery extends BaseQuery {
-    public $type = 'FieldQuery';
+    public $type: string = 'FieldQuery';
 
     constructor(public fieldName, public fieldValue, public operator?, public fuzzy?, public boost?) {
         super()
     }
 
-    toString() {
+    toString(): string {
         return `${this.fieldName}${this.operator} ${this.fieldValue}`;
     }
 
@@ -231,13 +231,13 @@ export class FieldQuery extends BaseQuery {
 }
 
 export class QueryValue extends BaseQuery {
-    public $type = 'QueryValue';
+    public $type: string = 'QueryValue';
 
     constructor(public value: string, public type: any){
         super();
     }
 
-    toString() {
+    toString(): string {
         return this.value;
     }
 

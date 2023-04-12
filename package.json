@@ -8,7 +8,7 @@
     "gen-ordering": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
     "gen": "npm run gen-standard && npm run gen-ordering",
     "tsc": "tsc",
-    "build": "npm run gen && npm run tsc",
+    "build": "npm run gen-ordering && npm run tsc",
     "test": "jest"
   },
   "keywords": [],
@@ -18,14 +18,14 @@
     "antlr4": "^4.8.0"
   },
   "devDependencies": {
-    "@types/jest": "^25.1.1",
-    "@types/node": "^13.7.0",
-    "jest": "^25.1.0",
+    "@types/jest": "^29.5.0",
+    "@types/node": "^18.15.11",
+    "jest": "^29.5.0",
     "jest-runner-tsc": "^1.6.0",
-    "ts-jest": "^25.2.0",
-    "ts-loader": "^6.2.2",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "ts-jest": "^29.1.0",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.4",
+    "webpack": "^5.78.0",
+    "webpack-cli": "^5.0.1"
   }
 }

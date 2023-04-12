@@ -2,7 +2,7 @@ import { LuceneOrderingQueryParser } from '../src/parsers/LuceneOrderingQueryPar
 import {dump, noop} from "./TestTools";
 import {Query} from "../src/ast/BaseQuery";
 
-const parser = new LuceneOrderingQueryParser();
+const parser: LuceneOrderingQueryParser = new LuceneOrderingQueryParser();
 
 function it(query: string, fn?: any|Query) {
     test(query, () => {
