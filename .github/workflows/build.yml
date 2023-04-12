@@ -34,6 +34,6 @@ jobs:
     - shell: cmd
       run: generate-ordering-parser.bat
     - name: Typescript Compile
-      run: tsc  
+      run: npm run tsc  
     - name: Test
-      run: jest
+      run: npm test
