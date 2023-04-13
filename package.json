@@ -4,8 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "gen-standard": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\standard\\Standard.g4",
-    "gen-ordering": "tools\\antlr -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
+    "gen-standard": "java -jar tools\\antlr-4.8-complete.jar -Dlanguage=JavaScript src\\grammar\\standard\\Standard.g4",
+    "gen-ordering": "java -jar tools\\antlr-4.8-complete.jar -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
     "gen": "npm run gen-standard && npm run gen-ordering",
     "tsc": "tsc",
     "build": "npm run gen && npm run tsc",

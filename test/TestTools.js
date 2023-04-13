@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.noop = exports.dump = exports.track = void 0;
 var fs_1 = require("fs");
 function track() {
     var cache = [];
@@ -15,7 +16,7 @@ function track() {
 }
 exports.track = track;
 function dump(value, path) {
-    fs_1.writeFileSync(path || 'dump.json', JSON.stringify(value, track(), 4), 'utf-8');
+    (0, fs_1.writeFileSync)(path || 'dump.json', JSON.stringify(value, track(), 4), 'utf-8');
 }
 exports.dump = dump;
 function noop() { }
