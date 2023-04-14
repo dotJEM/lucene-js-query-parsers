@@ -1,6 +1,5 @@
-import {OrderingParser} from '../grammar/ordering/OrderingParser';
-import {OrderingLexer} from '../grammar/ordering/OrderingLexer';
-import {InputStream, CommonTokenStream} from 'antlr4';
+import OrderingParser from '../grammar/ordering/OrderingParser.js';
+import OrderingLexer from '../grammar/ordering/OrderingLexer.js';
 import {
     BaseQuery,
     NotQuery,
@@ -16,12 +15,14 @@ import {
     RangeQuery,
     AnyQuery
 } from "../ast/BaseQuery";
+import { CommonTokenStream, InputStream} from "antlr4";
+import {Tree} from "antlr4/src/antlr4/tree/Tree";
 
 export class LuceneOrderingQueryParser {
-    public parse(query: string, processSyntaxTree: ((tree: any) => any) = (tree => tree)) {
-        const input = new InputStream(query);
+    public parse(query: string, processSyntaxTree: ((tree: Tree) => any) = (tree => tree)) {
+        const input: InputStream = new InputStream(query);
         const lexer = new OrderingLexer(input);
-        const tokens = new CommonTokenStream(lexer);
+        const tokens: CommonTokenStream = new CommonTokenStream(lexer);
         const parser = new OrderingParser(tokens);
         (parser as any).buildParseTrees = true;
 
@@ -159,7 +160,7 @@ export class LuceneOrderingQueryVisitor {
     }
 
     value(ctx): QueryValue {
-        const rule = <Terminal>this.mapChildren(ctx)[0];
+        const rule: Terminal = <Terminal>this.mapChildren(ctx)[0];
         const text = ctx.getText();
         return new QueryValue(text, rule.symbol);
     }

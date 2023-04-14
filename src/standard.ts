@@ -1,4 +1,4 @@
-import { LuceneStandardQueryParser } from "./parsers/LuceneStandardQueryParser.js";
+import { LuceneStandardQueryParser } from "./parsers/LuceneStandardQueryParser";
 import {BaseQuery} from "./ast/BaseQuery";
 
 export const dotjem = {

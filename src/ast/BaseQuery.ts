@@ -1,5 +1,3 @@
-
-
 export class BaseQuery {
     public $type: string = 'BaseQuery';
 
