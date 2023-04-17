@@ -1,15 +1,15 @@
-import { StandardParser } from '../grammar/standard/StandardParser';
-import { StandardLexer } from '../grammar/standard/StandardLexer';
-import { InputStream, CommonTokenStream } from 'antlr4';
+import StandardParser from '../grammar/standard/StandardParser.js';
+import StandardLexer from '../grammar/standard/StandardLexer.js';
+import {CommonTokenStream, InputStream, Lexer} from "antlr4";
 import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "../ast/BaseQuery";
-import {LuceneOrderingQueryVisitor} from "./LuceneOrderingQueryParser";
+import {Tree} from "antlr4/src/antlr4/tree/Tree";
 
 export class LuceneStandardQueryParser {
-    public parse(query: string, processSyntaxTree: ((tree: any) => any) = (tree => tree)) {
-        const input = new InputStream(query);
-        const lexer = new StandardLexer(input);
-        const tokens = new CommonTokenStream(lexer);
-        const parser = new StandardParser(tokens);
+    public parse(query: string, processSyntaxTree: ((tree: Tree) => any) = (tree => tree)) {
+        const input: InputStream = new InputStream(query);
+        const lexer: StandardLexer = new StandardLexer(input);
+        const tokens: CommonTokenStream = new CommonTokenStream(lexer as Lexer);
+        const parser: StandardParser = new StandardParser(tokens);
         (parser as any).buildParseTrees = true;
 
         const tree = processSyntaxTree(parser.mainQ());
@@ -97,12 +97,12 @@ export class LuceneStandardQueryVisitor {
     }
 
     mainQ(ctx):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         return children[0];
     }
 
     clauseOr(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -110,7 +110,7 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseAnd(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -118,7 +118,7 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseDefault(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
@@ -126,11 +126,11 @@ export class LuceneStandardQueryVisitor {
     }
 
     clauseNot(ctx: any):BaseQuery {
-        const children = this.mapChildren(ctx);
+        const children: BaseQuery[] = this.mapChildren(ctx);
         if(children.length < 2)
             return children[0];
 
-        for (let i = 1; i < children.length; i++)
+        for (let i: number = 1; i < children.length; i++)
             children[i] = new NotQuery(children[i]);
 
         return new AndQuery(children);
@@ -143,7 +143,7 @@ export class LuceneStandardQueryVisitor {
             let value = null;
             let termModifier = null;
 
-            for(let i = 0; i<ctx.children.length; i++){
+            for(let i: number = 0; i<ctx.children.length; i++){
                 const child = ctx.children[i];
                 switch (this.rule(child)) {
                     case 'modifier':
@@ -167,10 +167,10 @@ export class LuceneStandardQueryVisitor {
         return null;
     }
 
-    or_() {}
-    and_() {}
-    not_() {}
-    sep() {}
+    or_(): void {}
+    and_(): void {}
+    not_(): void {}
+    sep(): void {}
 
     private rule(ctx){
         return this.parser.ruleNames[ctx.ruleIndex];

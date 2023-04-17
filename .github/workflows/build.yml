@@ -8,27 +8,45 @@ on:
 
 jobs:
   build:
-
-    # runs-on: ubuntu-latest
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [16.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v3
       with:
+        distribution: 'microsoft'
         java-version: '11' # The JDK version to make available on the path.
         java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
         architecture: x64 # (x64 or x86) - defaults to x64
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - shell: bash
-      run: call generate-ordering-parser.bat
-    - run: tsc  
-    - run: jest
+        cache: 'npm'
+    - name: Install dependencies
+      run: npm ci
+    - name: Build
+      run: npm run build
+    - name: Test
+      run: npm test
+    - name: Calculate Version Parameters
+      if: ${{ github.ref == 'refs/heads/master' }}
+      id: version
+      run: |
+        build=${{github.run_number}}
+        template=`cat ./VERSION`
+        echo "shortsha=$shortsha" >> $GITHUB_OUTPUT
+        echo "npmver=${template//build/$build}.0" >> $GITHUB_OUTPUT
+        
+    - name: Release to NPM
+      if: ${{ github.ref == 'refs/heads/master' }}
+      run: |
+        npm version ${{ steps.version.outputs.npmver }}
+        npm pkg set sha=${{ steps.version.outputs.shortsha }}
+        npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_API_TOKEN }}
