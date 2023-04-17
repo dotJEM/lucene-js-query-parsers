@@ -1,5 +1,5 @@
 {
-  "name": "lucene-query-parsers",
+  "name": "@dotjem/lucene-query-parsers",
   "version": "1.0.0",
   "description": "",
   "exports": {
