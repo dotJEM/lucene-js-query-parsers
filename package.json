@@ -1,24 +1,33 @@
 {
-  "name": "dotjem-lucene-query-parsers",
-  "exports": {
-    ".": "./all.js",
-    "./dotjem": "./dotjem.js",
-    "./ordering": "./ordering.js",
-    "./standard": "./standard.js"
-  },
+  "name": "lucene-query-parsers",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/all.js",
-  "types": "dist/all.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/esm/types/index.d.ts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/types/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
+  "main": "./dist/cjs/index.js",
+  "types": "./dist/cjs/types/index.d.ts",
   "files": [
-    "/dist"
+    "dist/**/*"
   ],
   "scripts": {
+    "clean": "rm -rf ./dist",
     "gen-standard": "java -jar tools\\antlr-4.12.0-complete.jar -Dlanguage=JavaScript src\\grammar\\standard\\Standard.g4",
     "gen-ordering": "java -jar tools\\antlr-4.12.0-complete.jar -Dlanguage=JavaScript src\\grammar\\ordering\\Ordering.g4",
     "gen": "npm run gen-standard && npm run gen-ordering",
     "tsc": "tsc",
-    "build": "npm run gen && npm run tsc",
+    "build": "npm run clean && npm run gen && npm run build:esm && npm run build:cjs",
+    "build:esm": "tsc -p ./tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
+    "build:cjs": "tsc -p ./tsconfig.cjs.json",
     "test": "jest"
   },
   "type": "module",

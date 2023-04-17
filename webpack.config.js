@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 export default {
     devtool: 'source-map',
     entry: {
-        all: './src/all.ts',
+        index: './src/index.ts',
         dotjem: './src/dotjem.ts',
         ordering: './src/ordering.ts',
         standard: './src/standard.ts',
@@ -16,7 +16,12 @@ export default {
         rules: [
             {
                 test: /.ts$/,
-                use: 'ts-loader',
+                use: [{
+                    loader: 'ts-loader',
+                    options: {
+                        configFile: "tsconfig.webpack.json"
+                    }
+                }],
                 exclude: [
                     /node_modules/,
                     /test/

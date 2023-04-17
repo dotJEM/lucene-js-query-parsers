@@ -15,15 +15,15 @@ import {
     RangeQuery,
     AnyQuery
 } from "../ast/BaseQuery";
-import { CommonTokenStream, InputStream} from "antlr4";
+import {CommonTokenStream, InputStream, Lexer} from "antlr4";
 import {Tree} from "antlr4/src/antlr4/tree/Tree";
 
 export class LuceneOrderingQueryParser {
     public parse(query: string, processSyntaxTree: ((tree: Tree) => any) = (tree => tree)) {
         const input: InputStream = new InputStream(query);
-        const lexer = new OrderingLexer(input);
-        const tokens: CommonTokenStream = new CommonTokenStream(lexer);
-        const parser = new OrderingParser(tokens);
+        const lexer: OrderingLexer = new OrderingLexer(input);
+        const tokens: CommonTokenStream = new CommonTokenStream(lexer as Lexer);
+        const parser: OrderingParser = new OrderingParser(tokens);
         (parser as any).buildParseTrees = true;
 
         const tree = processSyntaxTree(parser.query());

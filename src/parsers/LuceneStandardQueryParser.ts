@@ -1,15 +1,15 @@
 import StandardParser from '../grammar/standard/StandardParser.js';
 import StandardLexer from '../grammar/standard/StandardLexer.js';
-import { CommonTokenStream, InputStream} from "antlr4";
+import {CommonTokenStream, InputStream, Lexer} from "antlr4";
 import { BaseQuery, NotQuery, AndQuery, OrQuery, FieldQuery, Terminal, UnknownQuery } from "../ast/BaseQuery";
 import {Tree} from "antlr4/src/antlr4/tree/Tree";
 
 export class LuceneStandardQueryParser {
     public parse(query: string, processSyntaxTree: ((tree: Tree) => any) = (tree => tree)) {
         const input: InputStream = new InputStream(query);
-        const lexer = new StandardLexer(input);
-        const tokens: CommonTokenStream = new CommonTokenStream(lexer);
-        const parser = new StandardParser(tokens);
+        const lexer: StandardLexer = new StandardLexer(input);
+        const tokens: CommonTokenStream = new CommonTokenStream(lexer as Lexer);
+        const parser: StandardParser = new StandardParser(tokens);
         (parser as any).buildParseTrees = true;
 
         const tree = processSyntaxTree(parser.mainQ());
