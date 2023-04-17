@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
-    # runs-on: ubuntu-latest
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -31,9 +29,24 @@ jobs:
         cache: 'npm'
     - name: Install dependencies
       run: npm ci
-    #- shell: cmd
-    #  run: generate-ordering-parser.bat
-    - name: Build
-      run: npm run build
     - name: Test
       run: npm test
+    - name: Build
+      run: npm run build
+    - name: Calculate Version Parameters
+      if: ${{ github.ref == 'refs/heads/master' }}
+      id: version
+      run: |
+        build=${{github.run_number}}
+        template=`cat ./VERSION`
+        echo "shortsha=$shortsha" >> $GITHUB_OUTPUT
+        echo "npmver=${template//build/$build}.0" >> $GITHUB_OUTPUT
+        
+    - name: Release to NPM
+      if: ${{ github.ref == 'refs/heads/master' }}
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
+      run: |
+        npm version ${{ steps.version.outputs.npmver }}
+        npm pkg set sha=${{ steps.version.outputs.shortsha }}
+        npm publish
