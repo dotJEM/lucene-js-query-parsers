@@ -44,9 +44,9 @@ jobs:
         
     - name: Release to NPM
       if: ${{ github.ref == 'refs/heads/master' }}
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_API_TOKEN }}
       run: |
         npm version ${{ steps.version.outputs.npmver }}
         npm pkg set sha=${{ steps.version.outputs.shortsha }}
         npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_API_TOKEN }}
