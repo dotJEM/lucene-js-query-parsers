@@ -47,6 +47,9 @@ jobs:
         shortsha=$(git rev-parse --short ${{ github.sha }})
         echo "shortsha=$shortsha" >> $GITHUB_OUTPUT
         echo "npmver=${template//build/$build}" >> $GITHUB_OUTPUT
+    
+    - name: ECHO
+      run: echo ${{ github.event.name }}
         
     - name: Release to NPM
       if: github.event.name == 'push'
