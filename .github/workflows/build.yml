@@ -41,7 +41,7 @@ jobs:
         build=${{github.run_number}}
         template=`cat ./VERSION`
         echo "shortsha=$shortsha" >> $GITHUB_OUTPUT
-        echo "npmver=${template//build/$build}.0" >> $GITHUB_OUTPUT
+        echo "npmver=${template//build/$build}" >> $GITHUB_OUTPUT
         
     - name: Release to NPM
       if: ${{ github.ref == 'refs/heads/master' }}
