@@ -54,7 +54,7 @@ jobs:
     - name: Release to NPM
       if: github.event_name == 'push'
       run: |
-        npm version ${{ steps.version.outputs.npmver }}
+        npm version ${{ steps.version.outputs.npmver }} --no-git-tag-version
         npm pkg set sha=${{ steps.version.outputs.shortsha }}
         npm publish --access public
       env:
