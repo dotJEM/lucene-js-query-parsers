@@ -13,10 +13,11 @@ import {
     QueryOrder,
     QueryValue,
     RangeQuery,
-    AnyQuery
+    AnyQuery, AndQueryValue, OrQueryValue, NotQueryValue
 } from "../ast/BaseQuery";
-import {CommonTokenStream, InputStream, Lexer} from "antlr4";
+import {CommonTokenStream, InputStream, Lexer, ParseTreeVisitor} from "antlr4";
 import {Tree} from "antlr4/src/antlr4/tree/Tree";
+import OrderingVisitor from "../grammar/ordering/OrderingVisitor.js";
 
 export class LuceneOrderingQueryParser {
     public parse(query: string, processSyntaxTree: ((tree: Tree) => any) = (tree => tree)) {
@@ -27,78 +28,57 @@ export class LuceneOrderingQueryParser {
         (parser as any).buildParseTrees = true;
 
         const tree = processSyntaxTree(parser.query());
-        return tree.accept(new LuceneOrderingQueryVisitor(parser));
+        return tree.accept(new Translator(parser));
     }
 }
 
-export class LuceneOrderingQueryVisitor {
-    private $$ignoredSymbols: any = {
-        WS: true,
-        LPA: true,
-        RPA: true
-    };
-
-    constructor(private parser) {}
-
-    visitChildren(ctx: any): BaseQuery {
-        const type = ctx.parser.ruleNames[ctx.ruleIndex];
-        if (typeof this[type] === 'function') {
-            return this[type](ctx);
-        }
-        return this.$$default(ctx);
+class Translator extends OrderingVisitor {
+    constructor(private parser) {
+        super();
     }
 
-    $$default(ctx) : BaseQuery{
-        return new UnknownQuery(
-            ctx,
-            ctx.parser.ruleNames[ctx.ruleIndex],
-            ctx.getText(),
-            this.mapChildren(ctx));
+    visitChildren(ctx): BaseQuery[] {
+        if (!Array.isArray(ctx.children))
+            return;
+
+        return ctx
+            .children
+            .reduce((list, next) => {
+                const result = next.accept(this);
+                if(result) list.push(result);
+                return list;
+            }, []);
     }
 
-    visitTerminal(ctx): Terminal {
-        const symbol = this.parser.symbolicNames[ctx.symbol.type];
-        if(this.$$ignoredSymbols[symbol])
-            return null;
-
-        return new Terminal(ctx.getText(), symbol);
-    }
-
-    query(ctx): Query {
-        const clause = ctx.clause.accept(this);
-        const order = ctx.order && ctx.order.accept(this);
+    visitQuery(ctx): BaseQuery {
+        const clause = ctx.clause().accept(this);
+        const order = ctx.order()?.accept(this);
         return new Query(clause, order);
     }
 
-    defaultClause(ctx): BaseQuery {
-        const children: BaseQuery[] = this.mapChildren(ctx);
+    visitClause(ctx): BaseQuery {
+        const children: BaseQuery[] = this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
-
-        //note: And as default, at least for now.
         return new AndQuery(children);
     }
 
-    orClause(ctx): BaseQuery {
-        const children: BaseQuery[] = this.mapChildren(ctx);
+    visitOr(ctx): BaseQuery {
+        const children: BaseQuery[] = this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
-
-        //note: And as default, at least for now.
         return new OrQuery(children);
     }
 
-    andClause(ctx): BaseQuery {
-        const children: BaseQuery[] = this.mapChildren(ctx);
+    visitAnd(ctx): BaseQuery {
+        const children: BaseQuery[] = this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
-
-        //note: And as default, at least for now.
         return new AndQuery(children);
     }
 
-    notClause(ctx): BaseQuery {
-        const children: BaseQuery[] = this.mapChildren(ctx);
+    visitNot(ctx): BaseQuery {
+        const children: BaseQuery[] = this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
 
@@ -108,82 +88,127 @@ export class LuceneOrderingQueryVisitor {
         return new AndQuery(children);
     }
 
-    basicClause(ctx): BaseQuery {
-        const children: BaseQuery[] = this.mapChildren(ctx);
+    visitBasic(ctx): BaseQuery {
+        const children: BaseQuery[] = this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
-
         return new AndQuery(children);
     }
 
-    anyClause(): AnyQuery {
+    visitAtom(ctx): BaseQuery {
+        return this.visitChildren(ctx)[0];
+    }
+
+    visitField(ctx): BaseQuery {
+        const field = ctx.name.text;
+        const operator = ctx.operator.text;
+        const value = ctx.value().accept(this);
+        return new FieldQuery(field, value, operator);
+    }
+
+    visitAny(ctx): BaseQuery {
         return new AnyQuery();
     }
 
-    orderingClause(ctx): QueryOrder {
-        const children: BaseQuery[] = this
-            .mapChildren(ctx)
-            .filter(child => child.$type === 'OrderField');
-        return new QueryOrder(children);
-    }
-
-    orderingField(ctx): OrderByField {
-        const field = ctx.fieldName.accept(this);
-        const direction = ctx.direction && ctx.direction.getText();
-        return new OrderByField(field, direction);
-    }
-
-    atom(ctx): BaseQuery {
-        return this.mapChildren(ctx)[0];
-    }
-
-    rangeClause(ctx): RangeQuery {
-        const field = ctx.fieldName.accept(this);
+    visitRange(ctx): BaseQuery {
+        const field = ctx.name.text;
         const from = ctx.from.accept(this);
         const to = ctx.to.accept(this);
         return new RangeQuery(field, from, to, 'LSBR', 'RSBR');
     }
 
-    field(ctx): FieldQuery {
-        const field = ctx.fieldName.accept(this);
-        const operator = ctx.fieldOperator.accept(this);
-        const value = ctx.fieldValue.accept(this);
-
-        return new FieldQuery(field, value, operator);
-    }
-
-    simple_value(ctx): QueryValue {
-        console.log(ctx.children);
-        const rule: Terminal = <Terminal>this.mapChildren(ctx)[0];
+    visitRangeValue(ctx): BaseQuery {
+        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
         const text = ctx.getText();
         return new QueryValue(text, rule.symbol);
     }
 
-    value(ctx): QueryValue {
-        const rule: Terminal = <Terminal>this.mapChildren(ctx)[0];
+    visitValue(ctx): BaseQuery {
+        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
         const text = ctx.getText();
         return new QueryValue(text, rule.symbol);
     }
 
-    name(ctx) {
-        return ctx.getText();
+    visitMv(ctx): BaseQuery {
+        return ctx.mvOr().accept(this);
     }
 
-    operator(ctx) {
-        return ctx.getText();
+    visitMvOr(ctx): BaseQuery {
+        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        if (children.length < 2)
+            return children[0];
+
+        //note: And as default, at least for now.
+        return new OrQueryValue(children, "");
     }
 
-    orOperator(): void{}
-    andOperator(): void{}
-    notOperator(): void{}
+    visitMvAnd(ctx): BaseQuery {
+        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        if (children.length < 2)
+            return children[0];
 
-    mapChildren(ctx): BaseQuery[] | undefined {
-        if (!Array.isArray(ctx.children))
-            return;
+        //note: And as default, at least for now.
+        return new AndQueryValue(children, "");
+    }
 
-        return ctx
-            .children
-            .map(c => c.accept(this))
-            .filter(c => c !== null && typeof c !== 'undefined');
+    visitMvNot(ctx): BaseQuery {
+        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        if (children.length < 2)
+            return children[0];
+
+        for (let i: number = 1; i < children.length; i++)
+            children[i] = new NotQueryValue(children[i], "");
+
+        return new AndQuery(children);
+    }
+
+    visitMvBasic(ctx): BaseQuery {
+        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
+        const text = ctx.getText();
+        return new QueryValue(text, rule.symbol);
+    }
+
+    visitOrder(ctx): BaseQuery {
+        const children: OrderByField[] = <OrderByField[]>this
+            .visitChildren(ctx)
+            .filter(child => child.$type === 'OrderByField');
+        return new QueryOrder(children);
+    }
+
+    visitOrderField(ctx): BaseQuery {
+        const field = ctx.FIELD().getText();
+        const direction = ctx.direction()?.getText();
+        return new OrderByField(field, direction);
+    }
+
+    visitDirection(ctx): BaseQuery {
+        return null;
+    }
+
+    visitNotOperator(ctx): BaseQuery {
+        return null;
+    }
+
+    visitAndOperator(ctx): BaseQuery {
+        return null;
+    }
+
+    visitOrOperator(ctx): BaseQuery {
+        return null;
+    }
+
+    visitSep(ctx): BaseQuery {
+        return null;
+    }
+    private $$ignoredSymbols: any = {
+        SPACE: true,
+        LPAREN: true,
+        RPAREN: true
+    };
+    visitTerminal(ctx): Terminal {
+        const symbol = this.parser.symbolicNames[ctx.symbol.type];
+        if(this.$$ignoredSymbols[symbol])
+            return null;
+        return new Terminal(ctx.getText(), symbol);
     }
 }

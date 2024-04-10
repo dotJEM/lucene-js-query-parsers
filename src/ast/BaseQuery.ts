@@ -1,3 +1,5 @@
+import exp = require("node:constants");
+
 export class BaseQuery {
     public $type: string = 'BaseQuery';
 
@@ -52,7 +54,7 @@ export class Query extends BaseQuery {
 export class QueryOrder extends BaseQuery {
     public $type: string = 'QueryOrder';
 
-    constructor(public clauses: BaseQuery[]){
+    constructor(public clauses: OrderByField[]){
         super();
     }
 
@@ -70,16 +72,13 @@ export class QueryOrder extends BaseQuery {
 
 export class OrderByField extends BaseQuery {
     public $type: string = 'OrderByField';
-    public $orderSet: boolean;
 
     constructor(public field: string, public order?: string){
         super();
-        this.$orderSet = typeof order !== "undefined";
-        this.order = order || "ASC";
     }
 
     toString(): string {
-        if(this.$orderSet){
+        if(this.order){
             return `${this.field} ${this.order}`;
         }
         return `${this.field}`;
@@ -217,7 +216,7 @@ export class FieldQuery extends BaseQuery {
     }
 
     toString(): string {
-        return `${this.fieldName}${this.operator} ${this.fieldValue}`;
+        return `${this.fieldName}${this.operator??' '}${this.fieldValue}`;
     }
 
     accept(visitor){
@@ -231,17 +230,72 @@ export class FieldQuery extends BaseQuery {
 export class QueryValue extends BaseQuery {
     public $type: string = 'QueryValue';
 
-    constructor(public value: string, public type: any){
+    constructor(public value: any, public type: any){
         super();
     }
 
     toString(): string {
-        return this.value;
+        return this.value.toString();
     }
 
     accept(visitor){
         if(typeof visitor.visitQueryValue === "function"){
             return visitor.visitQueryValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class NotQueryValue extends BaseQuery {
+    public $type: string = 'NotQueryValue';
+
+    constructor(public value: any, public type: any){
+        super();
+    }
+
+    toString(): string {
+        return `NOT ${this.value.toString()}`;
+    }
+
+    accept(visitor){
+        if(typeof visitor.visitQueryValue === "function"){
+            return visitor.visitQueryValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class AndQueryValue extends QueryValue {
+    public $type: string = 'AndQueryValue';
+
+    constructor(value: QueryValue[], type: any){
+        super(value, type);
+    }
+
+    toString(): string {
+        return `(${this.value.join(' AND ')})`;
+    }
+    accept(visitor){
+        if(typeof visitor.visitAndQueryValue === "function"){
+            return visitor.visitAndQueryValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class OrQueryValue extends QueryValue {
+    public $type: string = 'OrQueryValue';
+
+    constructor(value: QueryValue[], type: any){
+        super(value, type);
+    }
+
+    toString(): string {
+        return `(${this.value.join(' AND ')})`;
+    }
+    accept(visitor){
+        if(typeof visitor.visitOrQueryValue === "function"){
+            return visitor.visitOrQueryValue(this);
         }
         return super.accept(visitor);
     }

@@ -1,105 +1,76 @@
 grammar Ordering;
 
-/* Inspired by: https://github.com/lrowe/lucenequery */
+query : sep? clause (sep order)? sep? EOF;
 
-/*
- * Parser Rules
- */
+clause : or (sep? or)*;
+or    : and (orOperator and)*;
+and   : not (andOperator not)*;
+not   : basic (notOperator basic)*;
+basic : sep? LPAREN clause sep? RPAREN
+      | sep? atom
+      ;
 
-query  : WS? clause = defaultClause  (WS order = orderingClause)? WS? EOF;
-
-/*
- This implements all clauses grouped into batches of the same type.
- The order implements precedence (important).
-*/
-
-defaultClause : orClause (WS? orClause)*;
-orClause      : andClause (orOperator andClause)*;
-andClause     : notClause (andOperator notClause)*;
-notClause     : basicClause (notOperator basicClause)*;
-basicClause   :
-  WS? LPA defaultClause WS? RPA
-  | WS? atom
+atom
+  : any
+  | field
+  | value
+  | range
   ;
 
-atom : value | field | rangeClause | anyClause;
+// MATCH FIELD
+field : name = FIELD sep? operator = COLON sep? value;
 
-anyClause: STAR WS? COLON WS? STAR;
+// MATCH ALL
+any: STAR sep? COLON sep? STAR;
 
-rangeClause : fieldName = name WS? COLON WS? LSBR WS? from = simple_value WS TO WS to = simple_value WS? RSBR;
+// RANGE
+range : name = FIELD sep? COLON sep? LSBR sep? from = rangeValue sep TO sep to = rangeValue sep? RSBR;
+rangeValue: STAR | FIELD | TERM | DATE | DATE_TIME | SIMPLE_DATE_OFFSET | COMPLEX_DATE_OFFSET;
+
+// VALUES
+value : mv | FIELD | TERM | PHRASE;
+mv : LPAREN sep? mvOr sep? RPAREN;
+mvOr    : mvAnd (orOperator mvAnd)*;
+mvAnd   : mvNot (andOperator mvNot)*;
+mvNot   : mvBasic (notOperator mvBasic)*;
+mvBasic : sep? (FIELD | TERM | PHRASE)
+        | sep? mv ;
 
 //Order
-orderingClause    : WS? ORDER WS BY WS orderingField ( WS? COMMA WS? orderingField )* WS?;
-orderingField     : WS? fieldName = name (WS direction = orderingDirection)?;
-orderingDirection : (ASC | DESC);
+order      : ORDERBY sep orderField ( sep? COMMA sep? orderField )*;
+orderField : FIELD (sep direction)?;
+direction  : (ASC | DESC);
 
-field       : fieldName = name WS? fieldOperator = operator WS? fieldValue = value;
-name        : TERM;
-
-value       : TERM                                #VTerm
-            | WILDCARD_TERM                       #VWildcard
-            | NUMBER                              #VNumber
-            | PHRASE                              #VPhrase
-            | STAR                                #VMatchAll
-            ;
-
-simple_value : TERM                                #STerm
-             | STAR                                #SMatchAll
-             | NUMBER                              #SNumber
-             | DATE                                #SDate
-             | DATE_TIME                           #SDateTime
-             | SIMPLE_DATE_OFFSET                  #SDateOffset
-             | COMPLEX_DATE_OFFSET                 #SDateOffset
-             ;
-
-andOperator : WS? AND;
-orOperator  : WS? OR;
-notOperator : WS? (AND WS)? NOT;
-
-operator : COLON  #Equals
-		 ;
-
-
+notOperator  : sep? NOT;
+andOperator  : sep? AND;
+orOperator   : sep? OR;
 
 /*
  * Lexer Rules
  */
 
-LPA   : '(';
-RPA   : ')';
-LSBR  : '[';
-RSBR  : ']';
-LCBR  : '{';
-RCBR  : '}';
-STAR  : '*';
-QMARK : '?';
-COMMA : ',';
-PLUS  : '+';
-MINUS : '-';
-DOT   : '.';
-COLON : ':';
+LPAREN  : '(';
+RPAREN  : ')';
+LSBR    : '[';
+RSBR    : ']';
+COLON   : ':';
+COMMA   : ',';
+STAR    : '*';
+PLUS    : '+';
+MINUS   : '-';
 
-AND        : A N D      ;
-OR         : O R        ;
-NOT        : N O T      ;
-ORDER      : O R D E R  ;
-BY		   : B Y        ;
-ASC        : A S C      ;
-DESC       : D E S C    ;
-TO         : T O        ;
+AND     : 'AND'      ;
+OR      : 'OR'       ;
+NOT     : 'NOT'      ;
+ORDERBY : 'ORDER BY' ;
+ASC     : 'ASC'      ;
+DESC    : 'DESC'     ;
+TO      : 'TO'       ;
 
-DAYS       : D A Y S    ;
-
-WS  : (' '|'\t'|'\r'|'\n'|'\u3000')+;
-SS  : ' ';
-
-fragment INT        : [0-9];
-fragment ESC        : '\\' .;
-
-NUMBER  : MINUS? INT+ ('.' INT+)?;
 
 // Special Date Handling:
 //updated > 2018-03-04T14:41:23+00:00
+fragment INT        : [0-9];
 fragment TIMEOFFSET  : ( MINUS | PLUS ) INT INT ( ':' INT INT );
 TIME        : INT INT ':' INT INT ( ':' INT INT )? TIMEOFFSET?;
 DATE        : INT INT INT INT MINUS INT INT MINUS INT INT;
@@ -109,48 +80,54 @@ DATE_TIME   : DATE 'T' TIME;
 fragment NOW                      : N O W;
 fragment TODAY                    : T O D A Y;
 
-fragment SIMPLE_TIMESPAN          : (INT+ '.')? INT INT ':' INT INT ( ':' INT INT ('.' INT INT))?;
-SIMPLE_DATE_OFFSET                : ( ( NOW | TODAY ) SS? )? ( PLUS | MINUS ) SIMPLE_TIMESPAN;
+DAYS    : D A Y S?       ;
+HOURS   : H O U R S?     ;
+MINUTES : M I N U T E S? ;
+SECONDS : S E C O N D S? ;
 
-fragment COMPLEX_TIME_SPAN_DAY    : INT+ SS? ( D | D A Y | DAYS );
-fragment COMPLEX_TIME_SPAN_HOUR   : INT+ SS? ( H | H O U R | H O U R S );
-fragment COMPLEX_TIME_SPAN_MIN    : INT+ SS? ( M | M I N | M I N U T E | M I N U T E S );
-fragment COMPLEX_TIME_SPAN_SEC    : INT+ SS? ( S | S E C | S E C O N D | S E C O N D S );
+fragment SIMPLE_TIMESPAN          : (INT+ '.')? INT INT ':' INT INT ( ':' INT INT ('.' INT INT))?;
+SIMPLE_DATE_OFFSET       : ( ( NOW | TODAY ) SPACE? )? ( PLUS | MINUS ) SIMPLE_TIMESPAN;
+
+fragment COMPLEX_TIME_SPAN_DAY    : INT+ SPACE? ( D | DAYS );
+fragment COMPLEX_TIME_SPAN_HOUR   : INT+ SPACE? ( H | HOURS );
+fragment COMPLEX_TIME_SPAN_MIN    : INT+ SPACE? ( M | MINUTES );
+fragment COMPLEX_TIME_SPAN_SEC    : INT+ SPACE? ( S | SECONDS );
 fragment COMPLEX_TIMESPAN
     : COMPLEX_TIME_SPAN_DAY
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_HOUR
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_HOUR SS? COMPLEX_TIME_SPAN_MIN
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_HOUR SS? COMPLEX_TIME_SPAN_MIN SS? COMPLEX_TIME_SPAN_SEC
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_MIN
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_MIN SS? COMPLEX_TIME_SPAN_SEC
-    | COMPLEX_TIME_SPAN_DAY SS? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_SEC
 
     | COMPLEX_TIME_SPAN_HOUR
-    | COMPLEX_TIME_SPAN_HOUR SS? COMPLEX_TIME_SPAN_MIN
-    | COMPLEX_TIME_SPAN_HOUR SS? COMPLEX_TIME_SPAN_MIN SS? COMPLEX_TIME_SPAN_SEC
-    | COMPLEX_TIME_SPAN_HOUR SS? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_SEC
 
     | COMPLEX_TIME_SPAN_MIN
-    | COMPLEX_TIME_SPAN_MIN SS? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
 
     | COMPLEX_TIME_SPAN_SEC
     ;
-COMPLEX_DATE_OFFSET               : ( ( NOW | TODAY ) SS? )? ( PLUS | MINUS ) COMPLEX_TIMESPAN;
+COMPLEX_DATE_OFFSET : ( ( NOW | TODAY ) SPACE? )? ( PLUS | MINUS ) COMPLEX_TIMESPAN;
 
-fragment TERM_CHAR  : (~( ' ' | '\t' | '\n' | '\r' | '\u3000' | '\'' | '"'
-                        | '(' | ')'  | '['  | ']'  | '{'      | '}'
-						| '!' | ':'  | '~'  | '>'  | '='      | '<'
-						| '?' | '*'
-				        | '\\'| ',' )| ESC );
+sep : SPACE+;
+SPACE  : ( ' ' | '\t' | '\r' | '\n' | '\u3000' );
 
-fragment WILDCARD_CHAR : (~( ' ' | '\t' | '\n' | '\r' | '\u3000' | '\'' | '"'
-                           | '(' | ')'  | '['  | ']'  | '{'      | '}'
-						   | '!' | ':'  | '~'  | '>'  | '='      | '<'
-				           | '\\'| ',' )| ESC );
+fragment ESC        : '\\' .;
+fragment FIELD_CHAR : [a-zA-Z0-9_.$@\-];
+fragment FIELD_START_CHAR : [a-zA-Z$@];
+fragment TERM_CHAR
+  :
+  ~( ' '  | '\t' | '\n' | '\r' | '\u3000'
+    | '\'' | '"'  | '('  | ')'  | '[' | ']'
+    | '{'  | '}'  | '!'  | ':'  | '\\'| ','
+   );
 
-TERM   : TERM_CHAR+ ;
-WILDCARD_TERM  : WILDCARD_CHAR+;
-
+FIELD  : FIELD_START_CHAR FIELD_CHAR*;
+TERM   : TERM_CHAR+;
 PHRASE : '"' ( ESC | ~('"'|'\\'))+ '"';
 
 fragment A : [aA];

@@ -22,15 +22,16 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist",
-    "gen-standard": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/standard/Standard.g4",
-    "gen-ordering": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4",
-    "gen-custom": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/custom/Custom.g4",
-    "gen": "npm run gen-standard && npm run gen-ordering && npm run gen-custom",
-    "tsc": "tsc",
+    "gen-standard": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/standard/Standard.g4 -o src/grammar/standard -visitor",
+    "gen-ordering": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/ordering/Ordering.g4 -o src/grammar/ordering -visitor",
+    "gen-dotjem": "java -jar tools/antlr-4.12.0-complete.jar -Dlanguage=JavaScript src/grammar/dotjem/Dotjem.g4 -o src/grammar/dotjem -visitor",
+    "gen": "npm run gen-standard && npm run gen-ordering && npm run gen-dotjem",
+    "tsc": "tsc --build",
     "build": "npm run clean && npm run gen && npm run build:esm && npm run build:cjs",
     "build:esm": "tsc -p ./tsconfig.esm.json && mv dist/esm/index.js dist/esm/index.mjs",
     "build:cjs": "tsc -p ./tsconfig.cjs.json",
-    "test": "jest"
+    "test": "jest",
+    "btest": "npm run build:cjs && npm run test"
   },
   "type": "module",
   "keywords": [],
