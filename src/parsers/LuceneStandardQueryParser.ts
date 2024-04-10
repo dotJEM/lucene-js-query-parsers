@@ -12,7 +12,7 @@ export class LuceneStandardQueryParser {
         const parser: StandardParser = new StandardParser(tokens);
         (parser as any).buildParseTrees = true;
 
-        const tree = processSyntaxTree(parser.mainQ());
+        const tree = processSyntaxTree(parser.query());
         return tree.accept(new LuceneStandardQueryVisitor(parser));
     }
 }

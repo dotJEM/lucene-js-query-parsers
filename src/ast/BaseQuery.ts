@@ -1,5 +1,3 @@
-import exp = require("node:constants");
-
 export class BaseQuery {
     public $type: string = 'BaseQuery';
 
