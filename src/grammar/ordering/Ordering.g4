@@ -26,14 +26,7 @@ atom : value | field | rangeClause | anyClause;
 
 anyClause: STAR WS? COLON WS? STAR;
 
-rangeClause :
-    fieldName = name
-    WS? COLON WS?
-    LSBR WS?
-    from = simple_value
-    WS TO WS
-    to = simple_value WS?
-    RSBR;
+rangeClause : fieldName = name WS? COLON WS? LSBR WS? from = simple_value WS TO WS to = simple_value WS? RSBR;
 
 //Order
 orderingClause    : WS? ORDER WS BY WS orderingField ( WS? COMMA WS? orderingField )* WS?;
