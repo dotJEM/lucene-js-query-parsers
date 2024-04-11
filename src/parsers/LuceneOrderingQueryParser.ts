@@ -7,13 +7,23 @@ import {
     OrQuery,
     FieldQuery,
     Terminal,
-    UnknownQuery,
     Query,
     OrderByField,
     QueryOrder,
-    QueryValue,
+    Value,
     RangeQuery,
-    AnyQuery, AndQueryValue, OrQueryValue, NotQueryValue
+    AnyQuery,
+    AndValue,
+    OrValue,
+    NotValue,
+    AnyValue,
+    NumberValue,
+    TextValue,
+    PhraseValue,
+    DateValue,
+    DateTimeValue,
+    TimeValue,
+    DateTimeOffsetValue
 } from "../ast/BaseQuery";
 import {CommonTokenStream, InputStream, Lexer, ParseTreeVisitor} from "antlr4";
 import {Tree} from "antlr4/src/antlr4/tree/Tree";
@@ -39,7 +49,7 @@ class Translator extends OrderingVisitor {
 
     visitChildren(ctx): BaseQuery[] {
         if (!Array.isArray(ctx.children))
-            return;
+            return [];
 
         return ctx
             .children
@@ -48,6 +58,17 @@ class Translator extends OrderingVisitor {
                 if(result) list.push(result);
                 return list;
             }, []);
+    }
+
+    firstYieldingChild(ctx): BaseQuery|null {
+        if (!Array.isArray(ctx.children))
+            return null;
+
+        for(let child of ctx.children){
+            const result = child.accept(this);
+            if(result) return result;
+        }
+        return null;
     }
 
     visitQuery(ctx): BaseQuery {
@@ -96,7 +117,7 @@ class Translator extends OrderingVisitor {
     }
 
     visitAtom(ctx): BaseQuery {
-        return this.visitChildren(ctx)[0];
+        return this.firstYieldingChild(ctx);
     }
 
     visitField(ctx): BaseQuery {
@@ -114,19 +135,15 @@ class Translator extends OrderingVisitor {
         const field = ctx.name.text;
         const from = ctx.from.accept(this);
         const to = ctx.to.accept(this);
-        return new RangeQuery(field, from, to, 'LSBR', 'RSBR');
+        return new RangeQuery(field, from, to, false, false);
     }
 
     visitRangeValue(ctx): BaseQuery {
-        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
-        const text = ctx.getText();
-        return new QueryValue(text, rule.symbol);
+        return this.firstYieldingChild(ctx);
     }
 
     visitValue(ctx): BaseQuery {
-        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
-        const text = ctx.getText();
-        return new QueryValue(text, rule.symbol);
+        return this.firstYieldingChild(ctx);
     }
 
     visitMv(ctx): BaseQuery {
@@ -134,38 +151,66 @@ class Translator extends OrderingVisitor {
     }
 
     visitMvOr(ctx): BaseQuery {
-        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        const children: Value[] = <Value[]>this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
 
         //note: And as default, at least for now.
-        return new OrQueryValue(children, "");
+        return new OrValue(children);
     }
 
     visitMvAnd(ctx): BaseQuery {
-        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        const children: Value[] = <Value[]>this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
-
-        //note: And as default, at least for now.
-        return new AndQueryValue(children, "");
+        return new AndValue(children);
     }
 
     visitMvNot(ctx): BaseQuery {
-        const children: QueryValue[] = <QueryValue[]>this.visitChildren(ctx);
+        const children: Value[] = <Value[]>this.visitChildren(ctx);
         if (children.length < 2)
             return children[0];
 
         for (let i: number = 1; i < children.length; i++)
-            children[i] = new NotQueryValue(children[i], "");
+            children[i] = new NotValue(children[i]);
 
         return new AndQuery(children);
     }
 
     visitMvBasic(ctx): BaseQuery {
-        const rule: Terminal = <Terminal>this.visitChildren(ctx)[0];
-        const text = ctx.getText();
-        return new QueryValue(text, rule.symbol);
+        return this.firstYieldingChild(ctx);
+    }
+
+    visitMvValue(ctx): BaseQuery {
+        return this.firstYieldingChild(ctx);
+    }
+
+    visitStar(ctx): BaseQuery {
+        return new AnyValue();
+    }
+
+    visitNumber   (ctx): BaseQuery {
+        return new NumberValue(ctx.getText());
+    }
+    visitText (ctx): BaseQuery {
+        console.log(ctx.getText());
+        return new TextValue(ctx.getText());
+    }
+    visitPhrase (ctx): BaseQuery {
+        return new PhraseValue(ctx.getText().slice(1, -1));
+    }
+    visitDate (ctx): BaseQuery {
+        return new DateValue(ctx.getText());
+    }
+    visitDateTime (ctx): BaseQuery {
+        return new DateTimeValue(ctx.getText());
+    }
+    visitTime (ctx): BaseQuery {
+        return new TimeValue(ctx.getText());
+    }
+
+    visitDateOffset  (ctx): BaseQuery {
+        return new DateTimeOffsetValue(ctx.getText());
     }
 
     visitOrder(ctx): BaseQuery {

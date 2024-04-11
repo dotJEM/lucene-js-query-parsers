@@ -29,16 +29,17 @@ any: STAR sep? COLON sep? STAR;
 
 // RANGE
 range : name = FIELD sep? COLON sep? ft=(LSBR|LCBR) sep? from = rangeValue sep TO sep to = rangeValue sep? tt=(RSBR|RCBR);
-rangeValue: STAR | FIELD | TERM;
+rangeValue: STAR | FIELD | TERM | NUMBER;
 
 // VALUES
-value : (mv | FIELD | TERM | PHRASE) boost? fuzzy?;
+value : mv | mvValue;
 mv : LPAREN sep? mvOr sep? RPAREN;
 mvOr    : mvAnd (orOperator mvAnd)*;
 mvAnd   : mvNot (andOperator mvNot)*;
 mvNot   : mvBasic (notOperator mvBasic)*;
-mvBasic : sep? (FIELD | TERM | PHRASE) boost? fuzzy?
+mvBasic : sep? mvValue
         | sep? mv ;
+mvValue : FIELD | TERM | PHRASE | NUMBER;
 
 // MODIFIERS
 modifier: PLUS | MINUS;
@@ -72,7 +73,6 @@ OR      : 'OR'       ;
 NOT     : 'NOT'      ;
 TO      : 'TO'       ;
 
-
 fragment INT        : [0-9];
 fragment ESC        : '\\' .;
 
@@ -92,7 +92,6 @@ NUMBER  : INT+ ('.' INT+)?;
 FIELD  : FIELD_START_CHAR FIELD_CHAR*;
 TERM   : TERM_CHAR+;
 PHRASE : '"' ( ESC | ~('"'|'\\'))+ '"';
-
 
 fragment A : [aA];
 fragment B : [bB];

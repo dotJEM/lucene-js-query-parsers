@@ -25,16 +25,27 @@ any: STAR sep? COLON sep? STAR;
 
 // RANGE
 range : name = FIELD sep? COLON sep? LSBR sep? from = rangeValue sep TO sep to = rangeValue sep? RSBR;
-rangeValue: STAR | FIELD | TERM | DATE | DATE_TIME | SIMPLE_DATE_OFFSET | COMPLEX_DATE_OFFSET;
+rangeValue: star | number | text | date | dateTime | time | dateOffset;
 
 // VALUES
-value : mv | FIELD | TERM | PHRASE;
+value : mv | mvValue;
 mv : LPAREN sep? mvOr sep? RPAREN;
 mvOr    : mvAnd (orOperator mvAnd)*;
 mvAnd   : mvNot (andOperator mvNot)*;
 mvNot   : mvBasic (notOperator mvBasic)*;
-mvBasic : sep? (FIELD | TERM | PHRASE)
+mvBasic : sep? mvValue
         | sep? mv ;
+mvValue : text | phrase | number;
+
+// PURE VALUES.
+star       : STAR;
+number     : NUMBER;
+text       : FIELD | TERM;
+phrase     : PHRASE;
+date       : DATE;
+dateTime   : DATE_TIME;
+time       : TIME;
+dateOffset : SIMPLE_DATE_OFFSET | COMPLEX_DATE_OFFSET;
 
 //Order
 order      : ORDERBY sep orderField ( sep? COMMA sep? orderField )*;
@@ -126,6 +137,7 @@ fragment TERM_CHAR
     | '{'  | '}'  | '!'  | ':'  | '\\'| ','
    );
 
+NUMBER : INT+ ('.' INT+)?;
 FIELD  : FIELD_START_CHAR FIELD_CHAR*;
 TERM   : TERM_CHAR+;
 PHRASE : '"' ( ESC | ~('"'|'\\'))+ '"';

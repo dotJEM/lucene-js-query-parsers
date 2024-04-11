@@ -1,9 +1,42 @@
-export class BaseQuery {
+export interface IQueryVisitor {
+    visitBaseQuery?(query: BaseQuery);
+    visitAnyQuery?(query: AnyQuery);
+    visitQuery?(query: Query);
+
+    visitAndQuery?(query: AndQuery);
+    visitOrQuery?(query: OrQuery);
+    visitNotQuery?(query: NotQuery);
+
+    visitRangeQuery?(query: RangeQuery);
+    visitFieldQuery?(query: FieldQuery);
+
+    visitValue?(query: Value);
+    visitAnyValue?(query: AnyValue);
+    visitTextValue?(query: TextValue);
+    visitPhraseValue?(query: PhraseValue);
+    visitNumberValue?(query: NumberValue);
+    visitDateValue?(query: DateValue);
+    visitTimeValue?(query: TimeValue);
+    visitDateTimeValue?(query: DateTimeValue);
+    visitDateTimeOffsetValue?(query: DateTimeOffsetValue);
+
+    visitOrValue?(query: OrValue);
+    visitAndValue?(query: AndValue);
+    visitNotValue?(query: NotValue);
+
+    visitOrderQuery?(query: QueryOrder);
+    visitOrderByField?(query: OrderByField);
+
+    visitTerminal?(query: Terminal);
+    visitUnknownQuery?(query: UnknownQuery);
+}
+
+export abstract class BaseQuery {
     public $type: string = 'BaseQuery';
 
-    constructor() {}
+    protected constructor() {}
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         return visitor.visitBaseQuery(this);
     }
 }
@@ -19,7 +52,7 @@ export class AnyQuery extends BaseQuery {
         return "*:*";
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitAnyQuery === "function"){
             return visitor.visitAnyQuery(this);
         }
@@ -41,7 +74,7 @@ export class Query extends BaseQuery {
         return this.clause.toString();
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitQuery === "function"){
             return visitor.visitQuery(this);
         }
@@ -60,7 +93,7 @@ export class QueryOrder extends BaseQuery {
         return this.clauses.map(c => c.toString()).join(',');
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitOrderQuery === "function"){
             return visitor.visitOrderQuery(this);
         }
@@ -82,9 +115,9 @@ export class OrderByField extends BaseQuery {
         return `${this.field}`;
     }
 
-    accept(visitor){
-        if(typeof visitor.visitOrderField === "function"){
-            return visitor.visitOrderField(this);
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitOrderByField === "function"){
+            return visitor.visitOrderByField(this);
         }
         return super.accept(visitor);
     }
@@ -101,7 +134,7 @@ export class UnknownQuery extends BaseQuery {
         return `<UNKNOWN QUERY OBJECT: type=${this.type}, value=${this.value}>`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitUnknownQuery === "function"){
             return visitor.visitUnknownQuery(this);
         }
@@ -112,17 +145,17 @@ export class UnknownQuery extends BaseQuery {
 export class RangeQuery extends BaseQuery {
     public $type: string = 'RangeQuery';
 
-    constructor(public field: string, public from: QueryValue, public to: QueryValue, public startType, public endType){
+    constructor(public field: string, public from: Value, public to: Value, public inclusiveFrom: boolean, public inclusiveTo: boolean){
         super();
     }
 
     toString(): string {
-        const lb = this.startType === "LSBR" ? '[' : '{';
-        const rb = this.endType === "RSBR" ? ']' : '}';
+        const lb = this.inclusiveFrom ? '{' : '[';
+        const rb = this.inclusiveTo ? '}' : ']';
         return `${this.field}:${lb}${this.from} TO ${this.to}${rb}`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitRangeQuery === "function"){
             return visitor.visitRangeQuery(this);
         }
@@ -141,7 +174,7 @@ export class Terminal extends BaseQuery {
         return `<TERMINAL: value=${this.value}, symbol=${this.symbol}>`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitTerminal === "function"){
             return visitor.visitTerminal(this);
         }
@@ -160,7 +193,7 @@ export class AndQuery extends BaseQuery {
         return `(${this.children.map(c => c.toString()).join(' AND ')})`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitAndQuery === "function"){
             return visitor.visitAndQuery(this);
         }
@@ -179,7 +212,7 @@ export class OrQuery extends BaseQuery {
         return `(${this.children.map(c => c.toString()).join(' OR ')})`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitOrQuery === "function"){
             return visitor.visitOrQuery(this);
         }
@@ -198,7 +231,7 @@ export class NotQuery extends BaseQuery {
         return `NOT ${this.child}`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitNotQuery === "function"){
             return visitor.visitNotQuery(this);
         }
@@ -217,7 +250,7 @@ export class FieldQuery extends BaseQuery {
         return `${this.fieldName}${this.operator??' '}${this.fieldValue}`;
     }
 
-    accept(visitor){
+    accept(visitor:IQueryVisitor){
         if(typeof visitor.visitFieldQuery === "function"){
             return visitor.visitFieldQuery(this);
         }
@@ -225,29 +258,167 @@ export class FieldQuery extends BaseQuery {
     }
 }
 
-export class QueryValue extends BaseQuery {
-    public $type: string = 'QueryValue';
+export abstract class Value extends BaseQuery {
+    public $type: string = 'Value';
 
-    constructor(public value: any, public type: any){
+    protected constructor(){
         super();
     }
 
-    toString(): string {
-        return this.value.toString();
-    }
-
-    accept(visitor){
-        if(typeof visitor.visitQueryValue === "function"){
-            return visitor.visitQueryValue(this);
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitValue === "function"){
+            return visitor.visitValue(this);
         }
         return super.accept(visitor);
     }
 }
 
-export class NotQueryValue extends BaseQuery {
-    public $type: string = 'NotQueryValue';
+export class TextValue extends Value {
+    public $type: string = 'TextValue';
 
-    constructor(public value: any, public type: any){
+    constructor(public value: any){
+        super();
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitTextValue === "function"){
+            return visitor.visitTextValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class AnyValue extends TextValue
+{
+    public $type: string = 'AnyValue';
+
+    constructor(){
+        super('*');
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitAnyValue === "function"){
+            return visitor.visitAnyValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class NumberValue extends TextValue {
+    public $type: string = 'NumberValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitNumberValue === "function"){
+            return visitor.visitNumberValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class PhraseValue extends TextValue {
+    public $type: string = 'PhraseValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return `"${this.value}"`;
+    }
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitPhraseValue === "function"){
+            return visitor.visitPhraseValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class DateValue extends TextValue {
+    public $type: string = 'DateValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitDateValue === "function"){
+            return visitor.visitDateValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class TimeValue extends TextValue {
+    public $type: string = 'TimeValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitTimeValue === "function"){
+            return visitor.visitTimeValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+export class DateTimeValue extends TextValue {
+    public $type: string = 'DateTimeValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitDateTimeValue === "function"){
+            return visitor.visitDateTimeValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+export class DateTimeOffsetValue extends TextValue {
+    public $type: string = 'DateTimeOffsetValue';
+
+    constructor(value: any){
+        super(value);
+    }
+    toString(): string {
+        return this.value.toString();
+    }
+
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitDateTimeOffsetValue === "function"){
+            return visitor.visitDateTimeOffsetValue(this);
+        }
+        return super.accept(visitor);
+    }
+}
+
+export class NotValue extends Value {
+    public $type: string = 'NotValue';
+
+    constructor(public value: Value){
         super();
     }
 
@@ -255,47 +426,46 @@ export class NotQueryValue extends BaseQuery {
         return `NOT ${this.value.toString()}`;
     }
 
-    accept(visitor){
-        if(typeof visitor.visitQueryValue === "function"){
-            return visitor.visitQueryValue(this);
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitNotValue === "function"){
+            return visitor.visitNotValue(this);
         }
         return super.accept(visitor);
     }
 }
 
-export class AndQueryValue extends QueryValue {
-    public $type: string = 'AndQueryValue';
+export class AndValue extends Value {
+    public $type: string = 'AndValue';
 
-    constructor(value: QueryValue[], type: any){
-        super(value, type);
+    constructor(public value: Value[]){
+        super();
     }
 
     toString(): string {
         return `(${this.value.join(' AND ')})`;
     }
-    accept(visitor){
-        if(typeof visitor.visitAndQueryValue === "function"){
-            return visitor.visitAndQueryValue(this);
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitAndValue === "function"){
+            return visitor.visitAndValue(this);
         }
         return super.accept(visitor);
     }
 }
 
-export class OrQueryValue extends QueryValue {
-    public $type: string = 'OrQueryValue';
+export class OrValue extends Value {
+    public $type: string = 'OrValue';
 
-    constructor(value: QueryValue[], type: any){
-        super(value, type);
+    constructor(public value: Value[]){
+        super();
     }
 
     toString(): string {
-        return `(${this.value.join(' AND ')})`;
+        return `(${this.value.join(' OR ')})`;
     }
-    accept(visitor){
-        if(typeof visitor.visitOrQueryValue === "function"){
-            return visitor.visitOrQueryValue(this);
+    accept(visitor:IQueryVisitor){
+        if(typeof visitor.visitOrValue === "function"){
+            return visitor.visitOrValue(this);
         }
         return super.accept(visitor);
     }
 }
-

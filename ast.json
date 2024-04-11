@@ -1,0 +1,49 @@
+{
+    "$type": "Query",
+    "clause": {
+        "$type": "AndQuery",
+        "children": [
+            {
+                "$type": "FieldQuery",
+                "fieldName": "contentType",
+                "fieldValue": {
+                    "$type": "SimpleQueryValue",
+                    "type": "FIELD",
+                    "value": "notification"
+                },
+                "operator": ":"
+            },
+            {
+                "$type": "FieldQuery",
+                "fieldName": "status",
+                "fieldValue": {
+                    "$type": "OrQueryValue",
+                    "type": "",
+                    "value": [
+                        {
+                            "$type": "SimpleQueryValue",
+                            "type": "FIELD",
+                            "value": "DRAFT"
+                        },
+                        {
+                            "$type": "SimpleQueryValue",
+                            "type": "FIELD",
+                            "value": "PREDEPARTURE"
+                        },
+                        {
+                            "$type": "SimpleQueryValue",
+                            "type": "TERM",
+                            "value": "24HOURPREARRIVAL"
+                        },
+                        {
+                            "$type": "SimpleQueryValue",
+                            "type": "TERM",
+                            "value": "72HOURPREARRIVAL"
+                        }
+                    ]
+                },
+                "operator": ":"
+            }
+        ]
+    }
+}
