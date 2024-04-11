@@ -1,154 +1,174 @@
 grammar DotJem;
 
-/* Inspired by: https://github.com/lrowe/lucenequery and JIRA */
+query : sep? clause (sep order)? sep? EOF;
 
-/*
- * Parser Rules
- */
+clause : or (sep? or)*;
+or    : and (orOperator and)*;
+and   : not (andOperator not)*;
+not   : basic (notOperator basic)*;
+basic : sep? LPAREN clause sep? RPAREN
+      | sep? atom
+      ;
 
-query  : WS? clause = defaultClause  (WS order = orderingClause)? WS? EOF;
-
-/*
- This implements all clauses grouped into batches of the same type.
- The order implements precedence (important).
-*/
-
-defaultClause : orClause (WS? orClause)*;
-orClause      : andClause (orOperator andClause)*;
-andClause     : notClause (andOperator notClause)*;
-notClause     : basicClause (notOperator basicClause)*;
-basicClause   :
-  WS? LPA defaultClause WS? RPA
-  | WS? atom
+atom
+  : any
+  | field
+  | value
+  | range
+  | in
   ;
 
-atom : value | field | inClause | notInClause | rangeClause;
+// MATCH FIELD
+field : name = FIELD sep? operator sep? value;
 
-inClause       : TERM WS IN WS? LPA WS? value ( WS? COMMA WS? value )* WS? RPA;
-notInClause    : TERM WS NOT WS IN WS? LPA WS? value ( WS? COMMA WS? value )* WS? RPA;
-rangeClause    : fieldName = name WS? COLON WS? start = ( LSBR | LCBR ) WS? from = simple_value WS ( TO | MINUS ) WS to = simple_value WS? end =( RSBR | RCBR );
+// MATCH ALL
+any: STAR sep? COLON sep? STAR;
+
+// RANGE
+range : name = FIELD sep? COLON sep? LSBR sep? from = rangeValue sep TO sep to = rangeValue sep? RSBR;
+rangeValue: star | number | text | date | dateTime | time | dateOffset;
+
+// IN
+in : name = FIELD (sep NOT)? sep IN sep? LPAREN sep? inValue (sep? COMMA sep? inValue)* sep? RPAREN;
+inValue: text | phrase | number;
+
+// VALUES
+value : mv | mvValue;
+mv : LPAREN sep? mvOr sep? RPAREN;
+mvOr    : mvAnd (orOperator mvAnd)*;
+mvAnd   : mvNot (andOperator mvNot)*;
+mvNot   : mvBasic (notOperator mvBasic)*;
+mvBasic : sep? mvValue
+        | sep? mv ;
+        //TODO: fieldName > PETER does not really make sense, sure there is a lexical order that can be used, but it's
+        //      not easily understood by a user in general that it would mean this.
+mvValue : text | phrase | number | date | dateTime | time | dateOffset;
+
+// PURE VALUES.
+star       : STAR;
+number     : NUMBER;
+text       : FIELD | TERM;
+phrase     : PHRASE;
+date       : DATE;
+dateTime   : DATE_TIME;
+time       : TIME;
+dateOffset : SIMPLE_DATE_OFFSET | COMPLEX_DATE_OFFSET;
+
+// OPERATORS
+operator : COLON
+         | EQ
+         | NEQ
+         | GT
+         | GTEQ
+         | LT
+         | LTEQ
+         | SIM
+         | NSIM ;
+
 
 //Order
-orderingClause    : WS? ORDER WS BY WS orderingField ( WS? COMMA WS? orderingField )* WS?;
-orderingField     : WS? fieldName = name (WS direction = orderingDirection)?;
-orderingDirection : (ASC | DESC);
+order      : ORDERBY sep orderField ( sep? COMMA sep? orderField )*;
+orderField : FIELD (sep direction)?;
+direction  : (ASC | DESC);
 
-field       : fieldName = name WS? fieldOperator = operator WS? fieldValue = value;
-name        : TERM;
-
-value       : TERM                                #Term
-            | WILDCARD_TERM                       #Wildcard
-            | INTEGER                             #IntegerNumber
-            | DECIMAL                             #DecimalNumber
-            | PHRASE                              #Phrase
-            | STAR                                #MatchAll
-			| DATE                                #Date
-			| DATE_TIME                           #DateTime
-			| DATE_OFFSET                         #DateOffset
-            ;
-
-simple_value : TERM                                #STerm
-             | INTEGER                             #SIntegerNumber
-             | DECIMAL                             #SDecimalNumber
-             | STAR                                #SMatchAll
-             | DATE                                #SDate
-             | DATE_TIME                           #SDateTime
-             | DATE_OFFSET                         #SDateOffset
-             ;
-
-andOperator : WS? AND;
-orOperator  : WS? OR;
-notOperator : WS? (AND WS)? NOT;
-
-operator : EQ       #Equals
-         | COLON    #Equals
-		 | NEQ		#NotEquals
-         | GT	    #GreaterThan
-		 | GTE      #GreaterThanOrEquals
-		 | LT       #LessThan
-		 | LTE      #LessThanOrEquals
-		 | SIM      #Similar
-		 | NSIM     #NotSimilar
-		 ;
-
-
+notOperator  : sep? NOT;
+andOperator  : sep? AND;
+orOperator   : sep? OR;
 
 /*
  * Lexer Rules
  */
 
-LPA   : '(';
-RPA   : ')';
-LSBR  : '[';
-RSBR  : ']';
-LCBR  : '{';
-RCBR  : '}';
-STAR  : '*';
-QMARK : '?';
-COMMA : ',';
-PLUS  : '+';
-MINUS : '-';
-DOT   : '.';
-COLON : ':';
+LPAREN  : '(';
+RPAREN  : ')';
+LSBR    : '[';
+RSBR    : ']';
+COMMA   : ',';
+STAR    : '*';
+PLUS    : '+';
+MINUS   : '-';
 
-AND        : A N D      ;
-OR         : O R        ;
-NOT        : N O T      ;
-IN         : I N        ;
-ORDER      : O R D E R  ;
-BY		   : B Y        ;
-ASC        : A S C      ;
-DESC       : D E S C    ;
-TO         : T O        ;
+COLON   : ':' ;
+GT      : '>' ;
+GTEQ    : '>=';
+LT      : '<' ;
+LTEQ    : '<=';
+EQ      : '=' ;
+NEQ     : '!=';
+SIM     : '~' ;
+NSIM    : '!~';
 
-EQ   : '='       ;
-NEQ  : '!='      ;
-GT   : '>'       ;
-GTE  : '>='      ;
-LT   : '<'       ;
-LTE  : '<='      ;
-SIM  : '~'       ;
-NSIM : '!~'      ;
-
-WS  : (' '|'\t'|'\r'|'\n'|'\u3000')+;
-
-fragment INT        : '0' .. '9';
-fragment ESC        : '\\' .;
-
-INTEGER  : MINUS? INT+;
-DECIMAL  : MINUS? INT+ ('.' INT+)?;
+AND     : 'AND'      ;
+OR      : 'OR'       ;
+NOT     : 'NOT'      ;
+ORDERBY : 'ORDER BY' ;
+ASC     : 'ASC'      ;
+DESC    : 'DESC'     ;
+TO      : 'TO'       ;
+IN      : 'IN'       ;
 
 // Special Date Handling:
 //updated > 2018-03-04T14:41:23+00:00
-fragment TIMEOFFSET  : ( MINUS | PLUS ) INT INT ( ':' INT INT );
-TIME        : INT INT ':' INT INT ( ':' INT INT )? TIMEOFFSET?;
+fragment INT        : [0-9];
+fragment TIMEOFFSET  : ( MINUS | PLUS ) INT INT ( COLON INT INT );
+TIME        : INT INT COLON INT INT ( COLON INT INT )? TIMEOFFSET?;
 DATE        : INT INT INT INT MINUS INT INT MINUS INT INT;
 DATE_TIME   : DATE 'T' TIME;
 
 // Special Timespan Handling:
-fragment TIME_IDEN_CHAR : [a-zA-Z];
-fragment NOW         : N O W;
-fragment TODAY       : T O D A Y;
-fragment SIMPLE_TIMESPAN       : (INT+ '.')? INT INT ':' INT INT ( ':' INT INT ('.' INT INT))?;
-fragment COMPLEX_TIMESPAN_PART : INT+ WS? TIME_IDEN_CHAR+;
-fragment COMPLEX_TIMESPAN      : (COMPLEX_TIMESPAN_PART WS?)+;
-fragment TIME_SPAN             : SIMPLE_TIMESPAN | COMPLEX_TIMESPAN;
-DATE_OFFSET           : (NOW | TODAY)? WS? (PLUS|MINUS) WS? TIME_SPAN;
+fragment NOW                      : N O W;
+fragment TODAY                    : T O D A Y;
 
-fragment TERM_CHAR  : (~( ' ' | '\t' | '\n' | '\r' | '\u3000' | '\'' | '"'
-                        | '(' | ')'  | '['  | ']'  | '{'      | '}'
-						| '!' | ':'  | '~'  | '>'  | '='      | '<'
-						| '?' | '*'
-				        | '\\'| ',' )| ESC );
+DAYS    : D A Y S?       ;
+HOURS   : H O U R S?     ;
+MINUTES : M I N U T E S? ;
+SECONDS : S E C O N D S? ;
 
-fragment WILDCARD_CHAR : (~( ' ' | '\t' | '\n' | '\r' | '\u3000' | '\'' | '"'
-                           | '(' | ')'  | '['  | ']'  | '{'      | '}'
-						   | '!' | ':'  | '~'  | '>'  | '='      | '<'
-				           | '\\'| ',' )| ESC );
+fragment SIMPLE_TIMESPAN          : (INT+ '.')? INT INT COLON INT INT ( COLON INT INT ('.' INT INT))?;
+SIMPLE_DATE_OFFSET       : ( ( NOW | TODAY ) SPACE? )? ( PLUS | MINUS ) SIMPLE_TIMESPAN;
 
-TERM   : TERM_CHAR+ ;
-WILDCARD_TERM  : WILDCARD_CHAR+;
+fragment COMPLEX_TIME_SPAN_DAY    : INT+ SPACE? ( D | DAYS );
+fragment COMPLEX_TIME_SPAN_HOUR   : INT+ SPACE? ( H | HOURS );
+fragment COMPLEX_TIME_SPAN_MIN    : INT+ SPACE? ( M | MINUTES );
+fragment COMPLEX_TIME_SPAN_SEC    : INT+ SPACE? ( S | SECONDS );
+fragment COMPLEX_TIMESPAN
+    : COMPLEX_TIME_SPAN_DAY
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_DAY SPACE? COMPLEX_TIME_SPAN_SEC
 
+    | COMPLEX_TIME_SPAN_HOUR
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+    | COMPLEX_TIME_SPAN_HOUR SPACE? COMPLEX_TIME_SPAN_SEC
+
+    | COMPLEX_TIME_SPAN_MIN
+    | COMPLEX_TIME_SPAN_MIN SPACE? COMPLEX_TIME_SPAN_SEC
+
+    | COMPLEX_TIME_SPAN_SEC
+    ;
+COMPLEX_DATE_OFFSET : ( ( NOW | TODAY ) SPACE? )? ( PLUS | MINUS ) COMPLEX_TIMESPAN;
+
+sep : SPACE+;
+SPACE  : ( ' ' | '\t' | '\r' | '\n' | '\u3000' );
+
+fragment ESC        : '\\' .;
+fragment FIELD_CHAR : [a-zA-Z0-9_.$@\-];
+fragment FIELD_START_CHAR : [a-zA-Z$@];
+fragment TERM_CHAR
+  :
+  ~( ' '  | '\t' | '\n' | '\r' | '\u3000'
+    | '\'' | '"'  | '('  | ')'  | '[' | ']'
+    | '{'  | '}'  | '!'  | ':'  | '\\'| ','
+    | '~'  | '='  | '!'  | '>'  | '<'
+   );
+
+NUMBER : INT+ ('.' INT+)?;
+FIELD  : FIELD_START_CHAR FIELD_CHAR*;
+TERM   : TERM_CHAR+;
 PHRASE : '"' ( ESC | ~('"'|'\\'))+ '"';
 
 fragment A : [aA];
