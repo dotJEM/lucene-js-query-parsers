@@ -63,5 +63,6 @@ testQuery('age:[5 TO 9]').for(...all);
 // testQuery('$version: [6.6 TO *]', '$version:[6.6 TO *]').for(...all);
 // testQuery('$version: [6 TO * ]', '$version:[6 TO *]').for(...all);
 // testQuery('$version: [ 6 TO * ]', '$version:[6 TO *]').for(...all);
-// testQuery('name: Peter Hansen', '(name:Peter AND Hansen)').for(...all);
-// testQuery('(contentType:notification AND status:(DRAFT OR   PREDEPARTURE OR   24HOURPREARRIVAL OR   72HOURPREARRIVAL))', '(contentType:notification AND status:(DRAFT OR PREDEPARTURE OR 24HOURPREARRIVAL OR 72HOURPREARRIVAL))').for(...all)
+testQuery('name: Peter Hansen', '(name:Peter AND Hansen)').for(...all);
+testQuery('(contentType:notification AND status:(DRAFT OR   PREDEPARTURE OR   24HOURPREARRIVAL OR   72HOURPREARRIVAL))', '(contentType:notification AND status:(DRAFT OR PREDEPARTURE OR 24HOURPREARRIVAL OR 72HOURPREARRIVAL))').for(...all)
+testQuery('status:(*:* NOT true)', '').for(...all);
